@@ -53,7 +53,7 @@ jar파일 내 저장된 클래스들을 JVM 위에 올리고 사용하지 않는
 
 클래스 로더가 로드한 클래스(Byte code로 이루어져 있다.)들을 해석하여 Binary Code로 변환하고, 실행한다.
 
-초기 JVM이 나왔을 당시에는 한줄씩 해석하는 Interpreter 방식이였기 때문에 속도가 느리다는 단점이 있었지만   
+초기 JVM이 나왔을 당시에는 한줄씩 해석하는 Interpreter 방식 이였기 때문에 속도가 느리다는 단점이 있었지만   
 JIT(Just In Time) Compiler 방식을 도입해 이 단점을 해결했다.
 
 #### **JIT Compiler** 란

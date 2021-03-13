@@ -149,3 +149,11 @@ JVM이 프로그램을 수행하기 위해 OS로부터 별도로 할당받은 �
 
 ## **JDK**와 **JRE**의 차이
 
+### **JRE** 란 
+
+Java Runtime Environment 의 약자로, 자바 프로그램을 실행시켜주는 환경을 구성해주는 도구
+
+### **JDK** 란
+
+Java Development Kit 의 약자로, 자바 개발을 위해 필요한 툴킷을 제공하는 도구.   
+JRE가 포함 되어있다.

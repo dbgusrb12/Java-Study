@@ -56,8 +56,26 @@ Mark-Summary-Compaction 단계를 거친다.
 Summary 단계는 앞서 GC를 수행한 영역에 대해서 별도로 살아 있는 객체를 식별한다는 점에서   
 Mark-Sweep-Compaction 알고리즘의 Sweep 단계와 다르며, 약간 더 복잡한 단계를 거친다.
 
-### **Concurrent Mark & Sweep GC**(이하 CMS)
+### **Concurrent Mark & Sweep GC**(CMS GC)
 
+CMS 방식은 기존 Parallel GC와 같이 멀티 Thread로 운영되지만, Minor GC를 수행하는 알고리즘이 다르고,   
+애플리케이션이 구동되는 중에 백그라운드에서 Thread 를 따로 만들어서 GC를 수행하기 때문에 stop-the-world   
+시간이 짧다.
+
+Initial Mark 단계, Concurrent Mark 단계, Remark 단계, Concurrent Sweep 단계를 거치는데,   
+Initial Mark 단계와 Remark 단계에서만 stop-the-world 가 발생하고, 나머지 두 단계는 애플리케이션의   
+다른 Thread가 실행되고 있는 상황에서 진행한다.
+
+1. Initial Mark 단계에서는 Class Loader에서 가장 가까운 객체 중 살아있는 객체만 찾고 끝낸다.
+2. Concurrent Mark 단계에서는 방금 살아있다고 확인한 객체에서 참조하고 있는 객체들을 따라가면서   
+확인한다.
+3. Remark 단계에서는 Concurrent Mark 단계에서 새로 추가되거나 참조가 끊긴 객체를 확인한다.
+4. Concurrent Sweep 단계에서는 이전 단계들에서 Mark 된 정보들을 기반으로 쓰레기를 정리하는 작업을   
+실행한다.
+
+CMS GC는 별도의 Compaction 단계가 존재하지 않기 때문에, Memory fragmentation이 발생할 수 있다.   
+조각난 메모리가 많아 Compaction 작업을 실행하면 다른 GC 방식의 stop-the-world 시간보다 길기 때문에,   
+Compaction 작업이 얼마나 자주, 오랫동안 수행되는지 확인해야한다.
 
 
 ### **G1(Garbage First) GC**

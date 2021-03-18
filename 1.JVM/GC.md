@@ -80,3 +80,6 @@ Compaction 작업이 얼마나 자주, 오랫동안 수행되는지 확인해야
 
 ### **G1(Garbage First) GC**
 
+기존 GC와는 다르게 young / old 영역으로 나뉘지 않고, Region 이라는 각각의 영역으로 나뉘어 지고,   
+Region 별로 순차적으로 GC 작업이 진행된다. Garbage First 라는 의미는 Garbage로만 꽉 찬    
+Region부터 Collection을 시작한다는 의미로 발견 되자 마자 즉각 정리한다.

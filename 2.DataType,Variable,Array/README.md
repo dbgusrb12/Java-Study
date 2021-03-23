@@ -71,6 +71,11 @@ String 클래스는 참조형에 속하지만, 기본형처럼 사용한다.
 ```java
 public class Literal {
     public static void main(String[] args) {
+        // 기본적으로 변수를 선언 할 때에는 
+        // 자료형 변수명; 으로 선언을 하고, 
+        // 초기화 할 때에는
+        // 변수명 = 값; 으로 초기화가 이루어진다.
+        // 밑의 예시들 처럼 선언과 동시에 초기화가 가능하다.
         int binary = 0b11;              // 2진수
         int octal = 015;                // 8진수
         int decimal = 15;               // 10진수
@@ -93,14 +98,13 @@ public class Literal {
 ```
 프로그램에서 직접 표현한 값을 의미하며, 자료형마다 리터럴을 다르게 표현한다.   
 
-정수형에서는 0b로 시작하면 2진수, 0으로 시작하면 8진수, 0x로 시작하면 16진수 int형으로 컴파일 되며,   
+*정수형* 에서는 0b로 시작하면 2진수, 0으로 시작하면 8진수, 0x로 시작하면 16진수 int형으로 컴파일 되며,   
 long 타입에서는 뒤에 L, l 을 붙여 표현한다.   
 
-실수형에서는 소수점 형태나 지수 형태로 표현한 값들이며, float 타입은 뒤에 f, double 타입은 뒤에 d를 붙여   
-표현한다. 기본 double 타입으로 컴파일 되어 뒤에 d를 붙이는 것을 생략해도 되지만, float 타입의 경우 f를   
-꼭 붙여줘야 한다.
+*실수형* 에서는 소수점 형태나 지수 형태로 표현한 값들이며, float 타입은 뒤에 f, double 타입은 뒤에 d를 붙여 표현한다.    
+기본 double 타입으로 컴파일 되어 뒤에 d를 붙이는 것을 생략해도 되지만, float 타입의 경우 f를 꼭 붙여줘야 한다.
 
-문자형에서는 단일 인용부호('')로 표현한 값들이며, 문자가 들어가거나, \u 이후 4자리 16진수 값으로 표현된다.
+*문자형* 에서는 단일 인용부호('')로 표현한 값들이며, 문자가 들어가거나, \u 이후 4자리 16진수 값으로 표현된다.
 
 # 참조형 (Reference type)
 
@@ -168,9 +172,48 @@ public class ArrayType {
 `[][]` 대괄호를 중첩하여 다중 배열로 사용할 수 있다.
 
 
+# 변수의 스코프와 라이프타임
+변수의 스코프는 변수에 접근할 수 있는 유효 범위/영역을 말하며, 일반적으로 선언된 블록(`{}`) 내에서만 엑세스 될 수 있다.   
+라이프타임은 변수가 메모리에서 살아있는 시간을 의미한다.
+
+멤버 변수(Instance variable), static 변수(Class variable), 지역 변수(Local variable) 로 나뉘어 지고,
+
+```java
+public class VariableScope {
+    int a = 10;         // 멤버 변수
+    static int b = 25;  // static 변수
+
+    public static void main(String[] args) {
+        VariableScope variableTest = new VariableScope();
+        int a = 25;     // 지역 변수
+        System.out.println("result is " + a);              // result is 25
+        System.out.println("result is " + variableTest.a); // result is 10
+
+        System.out.println("result is " + b);              // result is 25
+        int b = 10;     // 지역 변수
+        System.out.println("result is " + b);              // result is 10
+    }
+}
+```
+
+## 멤버 변수 (Instance Variable)
+
+클래스 내부와 모든 메소드 및 블록 외부에서 선언된 변수이며, static 메소드를 제외한 클래스 어디서든 사용 할 수 있고,   
+라이프타임은 객체가 메모리에 남아 있을 때까지 이다.
+
+## static 변수 (Class Variable)
+
+클래스 내부와 모든 메소드 및 블록 외부에서 static으로 선언된 변수 이며, 클래스 어디서든 사용 할 수 있고,   
+라이프타임은 프로그램이 끝날때 까지, 혹은 클래스가 메모리에 로드되는 동안 이다.
+
+## 지역 변수 (Local Variable)
+
+멤버 변수, 혹은 static 변수를 제외한 모든 변수 이며, 선언 된 블록 내에서 사용 할 수 있고,   
+라이프타임은 컨트롤이 선언 된 블록을 떠날때까지 이다.
 
 
 > 웹문서
 > - [자바 자료형 정리(Java Data Type)](https://jdm.kr/blog/213)
 > - [Java data type 정리](https://hyungjoon6876.github.io/jlog/2018/07/05/java-data-type.html)
 > - [[JAVA]자바_리터럴(literal)이란?](https://mine-it-record.tistory.com/100)
+> - [[Java] 변수의 스코프와 라이프타임](https://league-cat.tistory.com/411)

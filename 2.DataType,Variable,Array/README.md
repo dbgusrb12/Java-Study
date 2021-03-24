@@ -211,9 +211,105 @@ public class VariableScope {
 멤버 변수, 혹은 static 변수를 제외한 모든 변수 이며, 선언 된 블록 내에서 사용 할 수 있고,   
 라이프타임은 컨트롤이 선언 된 블록을 떠날때까지 이다.
 
+# 타입 변환
+
+Java 의 타입 변환에는 자동 타입 변환(promotion)과 강제 타입 변환(casting)이 있다.
+
+## 자동 타입 변환 (Promotion)
+
+크기가 작은 자료형을 큰 자료형에 대입할 때, 자동으로 작은 자료형이 큰 자료형으로 변환되는 현상이다.   
+기본형에서만 이루어지며, 타입의 크기는   
+`byte(1) < short(2) < int(4) < long(8) < float(4) < double(8)` 순서이다.   
+float 타입이 4byte고 long 타입이 8byte지만 더 큰 타입으로 구분 되는 이유는 float 타입의 표현 범위가 더 넓어서 이다.
+
+```java
+public class PromotionTest {
+    public static void main(String[] args) {
+        byte byteVal = 4;
+        int intVal = byteVal;       // 자동 타입 변환으로 byte 타입 데이터의 값이 int 타입으로 바뀐다.
+        System.out.println("result is " + intVal);     // result is 4
+        double doubleVal = intVal;   // 정수형 타입을 실수형 타입으로 변환할 때는 뒤에 .0이 붙은 실수형으로 표현된다.
+        System.out.println("result is " + doubleVal)    // result is 4.0
+        char charVal = 'A';
+        intVal = charVal;   // 문자 타입을 int형으로 변환할 때는 유니코드 값이 저장된다.
+        System.out.println("result is " + intVal);      // result is 65
+    }
+}
+```
+음수가 저장될 수 있는 byte, int 타입 등은 char 타입으로 자동 타입 변환 할 수 없다.(강제 타입 변환은 가능하다.)
+
+## 강제 타입 변환 (Casting)
+
+크기가 큰 자료형은 더 작은 자료형으로 자동 타입 변환을 할 수 없기 때문에 강제로 변환을 해줘야 하고, 이걸 강제 타입 변환(Casting) 이라고 한다.   
+이 과정에서 데이터의 손실이 있을 수 있다.
+```java
+public class CastingTest {
+    public static void main(String[] args) {
+        int intVal = 103029770;
+        // byte byteVal = intVal;   // 컴파일 에러가 난다. 
+        byte byteVal = (byte) intVal;   // 캐스팅을 하여 강제로 타입을 변환 시켜준다.
+        System.out.println("result is " + byteVal); // result is 10
+        intVal = 65;
+        char charVal = (char) intVal;
+        System.out.println("result is " + charVal); // result is "A"
+        double doubleVal = 3.14;
+        intVal = (int) doubleVal;
+        System.out.println("result is " + intVal);  // result is 3
+    }
+}
+```
+정수형 타입을 더 낮은 정수형 타입으로 캐스팅 할 때는 낮은 정수형 타입의 byte 크기에 따라 저장되고, 남은 byte는 버려지게 된다.   
+
+intVal 의 값이 103029770 이고, 이걸 int 타입의 크기인 4byte로 표현하면   
+00000110 00100100 00011100 00001010 이고,    
+byte 타입의 크기는 1byte 이기 때문에 앞의 3byte가 삭제되고, 남은 1byte로만 계산이 되서    
+~~00000110 00100100 00011100~~ 00001010 => 10 이 저장된다.    
+intVal 의 값이 1byte로 표현되는 값이라면 캐스팅을 해도 값이 유지된다.
+
+실수형 타입을 정수형 타입으로 캐스팅 할 때는 소수점 이하 부분은 버려지고, 정수 부분만 저장된다.
+
+자바에서는 데이터 값 검사를 위해 Byte.MIN_VALUE 나 Byte.MAX_VALUE 같은 최대값, 최소값 상수를 제공한다.
+
+
+# 1차 및 2차 배열 선언
+배열이란 같은 자료형의 데이터들을 연속된 공간에 저장하기 위한 자료구조이다.    
+연관된 데이터를 그룹화하여 묶어주는 역할을 하며, 중복된 변수의 선언을 줄여주고, 반복문 등을 이용하여 계산과 같은 과정을 쉽게 처리 할 수 있다.
+
+
+```java
+public class ArrayTest {
+    public static void main(String[] args) {
+        int[] array1;
+        int array2[];
+        int[] array3 = new int[5];
+        array3[0] = 1;
+        array3[1] = 2;
+        array3[2] = 3;
+        array3[3] = 4;
+        array3[4] = 5;
+        int[] array4 = {1, 2, 3, 4, 5};
+        int[] array5 = new int[]{1, 2, 3, 4, 5};
+
+        int[][] sampleArray1;
+        int sampleArray2[][];
+        int[][] sampleArray3 = new int[2][3];
+        int[][] sampleArray4 = {{1, 2, 3}, {4, 5, 6}};
+        int[][] sampleArray5 = new int[][]{{1, 2, 3}, {4, 5, 6}};
+    }
+}
+```
+다양한 방법으로 배열은 선언 및 초기화 할 수 있고, 배열에 접근할 때 처음은 0부터 시작한다.   
+예시 코드를 기준으로    
+1차원 배열은 스택 영역에 배열의 주소값이 담겨있고, 주소값이 가리키고 있는 힙영역부터 배열의 길이만큼 할당이 되어 있다.   
+2차원 배열은 스택 영역에 배열의 주소값이 담겨있고, 주소값이 가리키고 있는 힙영역부터 배열의 길이만큼 하위 배열의 주소값이 담겨있다.
+
+# 타입 추론
+
 
 > 웹문서
 > - [자바 자료형 정리(Java Data Type)](https://jdm.kr/blog/213)
 > - [Java data type 정리](https://hyungjoon6876.github.io/jlog/2018/07/05/java-data-type.html)
 > - [[JAVA]자바_리터럴(literal)이란?](https://mine-it-record.tistory.com/100)
 > - [[Java] 변수의 스코프와 라이프타임](https://league-cat.tistory.com/411)
+> - [3. Java 자바 - 자동 타입 변환, 강제 타입 변환](https://kephilab.tistory.com/27)
+> - [[Java] 배열(Array) 선언 및 초기화 하기](https://ifuwanna.tistory.com/231)

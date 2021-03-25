@@ -60,12 +60,6 @@ null 값을 가질 수 없으며, primitive type을 클래스화 한 Wrapper cla
 - 길이가 1bit인 논리형 타입으로, true 혹은 false로 나뉜다.
 - default 값은 false 이며, Wrapper class 는 Boolean 이다.
 
-## String 클래스
-
-String 클래스는 참조형에 속하지만, 기본형처럼 사용한다.   
-불변(immutable)하는 객체이고, 데이터를 바꾸는 메소드들은 새로운 String 클래스를 만드는 것이다.   
-기본형의 비교는 `==` 연산자를 사용하지만, String 클래스 간의 비교는 `equals()` 메소드를 사용해야한다.
-
 ## 리터럴 (Literal)
 
 ```java
@@ -110,7 +104,14 @@ long 타입에서는 뒤에 L, l 을 붙여 표현한다.
 
 `java.lang.Object` 클래스를 상속받거나, 선언한 자료형이 기본형이 아닐 경우 참조형이 된다.   
 참조형은 클래스형(Class type), 인터페이스형(Interface type), 배열형(Array type), Enum type 등이 있다.   
-new 연산자를 통해 생성되는 인스턴스들로, Heap 영역에 주소값이 저장되어 관리된다.
+new 연산자를 통해 생성되는 인스턴스들로, ~~Heap 영역에 주소값이 저장되어 관리된다.~~ Heap 영역에 실제 데이터 저장되고, 스택 영역에 주소값이 저장된다.
+
+## String 클래스
+
+String 클래스는 참조형에 속하지만, 기본형처럼 사용한다.   
+불변(immutable)하는 객체이고, 데이터를 바꾸는 메소드들은 새로운 String 클래스를 만드는 것이다.   
+기본형의 비교는 `==` 연산자를 사용하지만, String 클래스 간의 비교는 `equals()` 메소드를 사용해야한다.
+
 
 ## 클래스형(Class type)
 

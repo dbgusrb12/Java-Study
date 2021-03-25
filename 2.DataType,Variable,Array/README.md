@@ -229,7 +229,7 @@ public class PromotionTest {
         int intVal = byteVal;       // 자동 타입 변환으로 byte 타입 데이터의 값이 int 타입으로 바뀐다.
         System.out.println("result is " + intVal);     // result is 4
         double doubleVal = intVal;   // 정수형 타입을 실수형 타입으로 변환할 때는 뒤에 .0이 붙은 실수형으로 표현된다.
-        System.out.println("result is " + doubleVal)    // result is 4.0
+        System.out.println("result is " + doubleVal);    // result is 4.0
         char charVal = 'A';
         intVal = charVal;   // 문자 타입을 int형으로 변환할 때는 유니코드 값이 저장된다.
         System.out.println("result is " + intVal);      // result is 65

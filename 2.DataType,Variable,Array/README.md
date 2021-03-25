@@ -6,29 +6,29 @@ Data type, Variable, Array
 기본형은 메모리에 값 자체가 저장되고, 참조형의 경우 Heap 영역에 주소값이 참조된 형태로 Java GC에 의해 관리가 된다.
 
 # 기본형 (Primitive type)
-자바에서 기본 자료형은 반드시 사용하기 전에 선언 되어야하고, 자료형의 길이는 모든 OS에서 같다.   
+자바에서 기본 자료형은 반드시 사용하기 전에 선언 되어야하고, 자료형의 길이는 모든 OS 에서 같다.   
 기본형은 정수형, 실수형, 문자형, 논리형으로 나눠진다.   
-null 값을 가질 수 없으며, primitive type을 클래스화 한 Wrapper class (reference type) 에서는 null 값을 가질 수 있다.
+null 값을 가질 수 없으며, primitive type 을 클래스화 한 Wrapper class (reference type) 에서는 null 값을 가질 수 있다.
 
 ## 정수형
 
 ### byte
 
-- 길이가 8bit인 부호있는 정수형 타입으로, 범위는 -128 ~ 127 까지이다.
+- 길이가 8bit 인 부호있는 정수형 타입으로, 범위는 -128 ~ 127 까지이다.
 - default 값은 0이며, Wrapper class 는 Byte 이다.
 
 ### short
 
-- 길이가 16bit인 부호있는 정수형 타입으로, 범위는 -32768 ~ 32767 까지이다.
+- 길이가 16bit 인 부호있는 정수형 타입으로, 범위는 -32768 ~ 32767 까지이다.
 - default 값은 0이며, Wrapper class 는 Short 이다.
 ### int
 
-- 길이가 32bit인 부호있는 정수형 타입으로, 범위는 -2147483648 ~ 2147483647 까지이다.
+- 길이가 32bit 인 부호있는 정수형 타입으로, 범위는 -2147483648 ~ 2147483647 까지이다.
 - default 값은 0이며, Wrapper class 는 Integer 이다.
 
 ### long
 
-- 길이가 64bit인 부호있는 정수형 타입으로, 범위는 -9223372036854775808 ~ 9223372036854775807 까지이다.
+- 길이가 64bit 인 부호있는 정수형 타입으로, 범위는 -9223372036854775808 ~ 9223372036854775807 까지이다.
 - default 값은 0L 이며, L 은 long 타입의 리터럴이다. 
 - Wrapper class 는 Long 이다.
 
@@ -36,13 +36,13 @@ null 값을 가질 수 없으며, primitive type을 클래스화 한 Wrapper cla
 
 ### float
 
-- 길이가 32bit인 부호있는 실수형 타입으로, 범위는 1.40239846e-45f ~3.40282347e+38f 까지이다.
+- 길이가 32bit 인 부호있는 실수형 타입으로, 범위는 1.40239846e-45f ~3.40282347e+38f 까지이다.
 - default 값은 0.0f 이며, f 는 float 타입의 리터럴이다.
 - Wrapper class 는 Float 이다.
 
 ### double
 
-- 길이가 64bit인 부호있는 실수형 타입으로, 범위는 4.94065645841246544e-324~1.79769313486231570e+308 까지이다.
+- 길이가 64bit 인 부호있는 실수형 타입으로, 범위는 4.94065645841246544e-324~1.79769313486231570e+308 까지이다.
 - default 값은 0.0d 이며, d 는 double 타입의 리터럴이다.
 - Wrapper class 는 Double 이다.
 
@@ -50,14 +50,14 @@ null 값을 가질 수 없으며, primitive type을 클래스화 한 Wrapper cla
 
 ### char
 
-- 길이가 16bit인 유니코드 문자형 타입으로, 범위는 \u0000 ~ \uffff (0 ~ 2^15-1) 까지이다.
+- 길이가 16bit 인 유니코드 문자형 타입으로, 범위는 \u0000 ~ \uffff (0 ~ 2^15-1) 까지이다.
 - default 값은 \u0000이며, Wrapper class 는 Character 이다.
 
 ## 논리형
 
 ### boolean
 
-- 길이가 1bit인 논리형 타입으로, true 혹은 false로 나뉜다.
+- 길이가 1bit 인 논리형 타입으로, true 혹은 false 로 나뉜다.
 - default 값은 false 이며, Wrapper class 는 Boolean 이다.
 
 ## 리터럴 (Literal)
@@ -92,7 +92,7 @@ public class Literal {
 ```
 프로그램에서 직접 표현한 값을 의미하며, 자료형마다 리터럴을 다르게 표현한다.   
 
-*정수형* 에서는 0b로 시작하면 2진수, 0으로 시작하면 8진수, 0x로 시작하면 16진수 int형으로 컴파일 되며,   
+*정수형* 에서는 0b로 시작하면 2진수, 0으로 시작하면 8진수, 0x로 시작하면 16진수 int 형으로 컴파일 되며,   
 long 타입에서는 뒤에 L, l 을 붙여 표현한다.   
 
 *실수형* 에서는 소수점 형태나 지수 형태로 표현한 값들이며, float 타입은 뒤에 f, double 타입은 뒤에 d를 붙여 표현한다.    
@@ -115,10 +115,10 @@ String 클래스는 참조형에 속하지만, 기본형처럼 사용한다.
 
 ## 클래스형(Class type)
 
-``` java
+```java
 class Student {
     private String name;
-    Student(name) {
+    Student(String name) {
         this.name = name;
     }
     public int getName() {
@@ -155,7 +155,7 @@ interface Person {
     void run();
 }
 ```
-interface도 자료형(참조형)이기 때문에, 자신을 구현한 객체의 주소를 가질 수 있다.
+interface 도 자료형(참조형)이기 때문에, 자신을 구현한 객체의 주소를 가질 수 있다.
 
 ## 배열형(Array type)
 
@@ -187,12 +187,12 @@ public class VariableScope {
     public static void main(String[] args) {
         VariableScope variableTest = new VariableScope();
         int a = 25;     // 지역 변수
-        System.out.println("result is " + a);              // result is 25
-        System.out.println("result is " + variableTest.a); // result is 10
+        System.out.println("result is " + a);               // result is 25
+        System.out.println("result is " + variableTest.a);  // result is 10
 
-        System.out.println("result is " + b);              // result is 25
+        System.out.println("result is " + VariableScope.b); // result is 25
         int b = 10;     // 지역 변수
-        System.out.println("result is " + b);              // result is 10
+        System.out.println("result is " + b);               // result is 10
     }
 }
 ```
@@ -204,8 +204,9 @@ public class VariableScope {
 
 ## static 변수 (Class Variable)
 
-클래스 내부와 모든 메소드 및 블록 외부에서 static으로 선언된 변수 이며, 클래스 어디서든 사용 할 수 있고,   
-라이프타임은 프로그램이 끝날때 까지, 혹은 클래스가 메모리에 로드되는 동안 이다.
+클래스 내부와 모든 메소드 및 블록 외부에서 static 으로 선언된 변수 이며, 클래스 어디서든 사용 할 수 있고,   
+라이프타임은 프로그램이 끝날때 까지, 혹은 클래스가 메모리에 로드되는 동안 이다.   
+사용 할 때는 클래스명.변수명 형태로 사용하는 것을 권장한다.
 
 ## 지역 변수 (Local Variable)
 
@@ -221,7 +222,7 @@ Java 의 타입 변환에는 자동 타입 변환(promotion)과 강제 타입 �
 크기가 작은 자료형을 큰 자료형에 대입할 때, 자동으로 작은 자료형이 큰 자료형으로 변환되는 현상이다.   
 기본형에서만 이루어지며, 타입의 크기는   
 `byte(1) < short(2) < int(4) < long(8) < float(4) < double(8)` 순서이다.   
-float 타입이 4byte고 long 타입이 8byte지만 더 큰 타입으로 구분 되는 이유는 float 타입의 표현 범위가 더 넓어서 이다.
+float 타입이 4byte 고 long 타입이 8byte 지만 더 큰 타입으로 구분 되는 이유는 float 타입의 표현 범위가 더 넓어서 이다.
 
 ```java
 public class PromotionTest {
@@ -232,7 +233,7 @@ public class PromotionTest {
         double doubleVal = intVal;   // 정수형 타입을 실수형 타입으로 변환할 때는 뒤에 .0이 붙은 실수형으로 표현된다.
         System.out.println("result is " + doubleVal);    // result is 4.0
         char charVal = 'A';
-        intVal = charVal;   // 문자 타입을 int형으로 변환할 때는 유니코드 값이 저장된다.
+        intVal = charVal;   // 문자 타입을 int 형으로 변환할 때는 유니코드 값이 저장된다.
         System.out.println("result is " + intVal);      // result is 65
     }
 }
@@ -259,13 +260,13 @@ public class CastingTest {
     }
 }
 ```
-정수형 타입을 더 낮은 정수형 타입으로 캐스팅 할 때는 낮은 정수형 타입의 byte 크기에 따라 저장되고, 남은 byte는 버려지게 된다.   
+정수형 타입을 더 낮은 정수형 타입으로 캐스팅 할 때는 낮은 정수형 타입의 byte 크기에 따라 저장되고, 남은 byte 는 버려지게 된다.   
 
-intVal 의 값이 103029770 이고, 이걸 int 타입의 크기인 4byte로 표현하면   
+intVal 의 값이 103029770 이고, 이걸 int 타입의 크기인 4byte 로 표현하면   
 00000110 00100100 00011100 00001010 이고,    
-byte 타입의 크기는 1byte 이기 때문에 앞의 3byte가 삭제되고, 남은 1byte로만 계산이 되서    
+byte 타입의 크기는 1byte 이기 때문에 앞의 3byte 가 삭제되고, 남은 1byte 로만 계산이 되서    
 ~~00000110 00100100 00011100~~ 00001010 => 10 이 저장된다.    
-intVal 의 값이 1byte로 표현되는 값이라면 캐스팅을 해도 값이 유지된다.
+intVal 의 값이 1byte 로 표현되는 값이라면 캐스팅을 해도 값이 유지된다.
 
 실수형 타입을 정수형 타입으로 캐스팅 할 때는 소수점 이하 부분은 버려지고, 정수 부분만 저장된다.
 
@@ -305,6 +306,7 @@ public class ArrayTest {
 2차원 배열은 스택 영역에 배열의 주소값이 담겨있고, 주소값이 가리키고 있는 힙영역부터 배열의 길이만큼 하위 배열의 주소값이 담겨있다.
 
 # 타입 추론
+
 
 
 > 웹문서

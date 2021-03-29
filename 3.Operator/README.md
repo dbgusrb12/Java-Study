@@ -50,33 +50,33 @@ Java 에서의 연산자는 크게 단항, 이항, 삼항, 대입 연산자로 �
 ```java
 public class UnaryOperatorTest {
     public static void main(String[] args) {
-        int intVal = 10;
-        int intVal2 = -10;
-        boolean boolVal = true;
-        boolean boolVal2 = false;
-        Object result = ~intVal;
-        System.out.println("instance of Integer ? " + (result instanceof Integer));
-        // instance of Integer ? true (4byte [int 형] 으로 변환 후 연산 한다.)
-        System.out.println("result is " + intVal + " to binary string is " + Integer.toBinaryString(intVal));
-        // result is 10 to binary string is 1010
-        System.out.println("result is " + ~intVal + " to binary string is " + Integer.toBinaryString(~intVal));
-        // result is -11 to binary string is 11111111111111111111111111110101
-        System.out.println("result is " + intVal2 + " to binary string is " + Integer.toBinaryString(intVal2));
-        // result is -10 to binary string is 11111111111111111111111111110110
-        System.out.println("result is " + ~intVal2 + " to binary string is " + Integer.toBinaryString(~intVal2));
-        // result is 9 to binary string is 1001
-        System.out.println("result is " + !boolVal);    // result is false
-        System.out.println("result is " + !boolVal2);   // result is true
-        System.out.println("result is " + (-intVal));   // result is -10
-        System.out.println("result is " + (+intVal2));  // result is -10 +연산자는 형식적으로 제공되어있다.
-        System.out.println("result is " + (-intVal2));  // result is 10
-        System.out.println("result is " + (intVal++));  // result is 10
-        // 후위 증가 연산자로 인해 print 가 된 후 연산이 실행된다. 현재 시점에서 intVal 의 값은 11이다.
-        System.out.println("result is " + intVal);      // result is 11
-        System.out.println("result is " + (++intVal));  // result is 12
+        int positiveVal = 10;
+        int negativeVal = -10;
+        boolean trueVal = true;
+        boolean falseVal = false;
         
-        double doubleVal = (double)intVal;
-        System.out.println("result is " + doubleVal);   // result is 12.0
+        System.out.println("result is " + positiveVal + " to binary string is " + Integer.toBinaryString(positiveVal));
+        // result is 10 to binary string is 1010
+        
+        System.out.println("result is " + ~positiveVal + " to binary string is " + Integer.toBinaryString(~positiveVal));
+        // result is -11 to binary string is 11111111111111111111111111110101
+        // 4byte 이하인 경우 4byte(int 형)으로 변환 하여 연산한다. ~연산자는 2진수로 표현한 각 자리수를 반전시킨다.
+        // 0 -> 1, 1 -> 0
+        
+        System.out.println("result is " + !trueVal);        // result is false
+        System.out.println("result is " + !falseVal);       // result is true
+        
+        System.out.println("result is " + (-positiveVal));  // result is -10
+        System.out.println("result is " + (+negativeVal));  // result is -10 +연산자는 형식적으로 제공되어있다.
+        System.out.println("result is " + (-negativeVal));  // result is 10
+        
+        System.out.println("result is " + (positiveVal++)); // result is 10
+        // 후위 증가 연산자로 인해 print 가 된 후 연산이 실행된다. 현재 시점에서 intVal 의 값은 11이다.
+        System.out.println("result is " + positiveVal);     // result is 11
+        System.out.println("result is " + (++positiveVal)); // result is 12
+        
+        double doubleVal = (double)positiveVal;
+        System.out.println("result is " + doubleVal);       // result is 12.0
     }
 }
 ```

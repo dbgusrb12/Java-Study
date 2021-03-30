@@ -2,10 +2,12 @@ Data type, Variable, Array
 ===
 
 # Data type 이란?
+
 자바 언어가 처리할 수 있는 데이터의 종류를 뜻하며, 자바의 데이터 타입은 기본형(Primitive type)과 참조형   (Reference type)으로 나뉘어 진다.   
 기본형은 메모리에 값 자체가 저장되고, 참조형의 경우 Heap 영역에 주소값이 참조된 형태로 Java GC에 의해 관리가 된다.
 
 # 기본형 (Primitive type)
+
 자바에서 기본 자료형은 반드시 사용하기 전에 선언 되어야하고, 자료형의 길이는 모든 OS 에서 같다.   
 기본형은 정수형, 실수형, 문자형, 논리형으로 나눠진다.   
 null 값을 가질 수 없으며, primitive type 을 클래스화 한 Wrapper class (reference type) 에서는 null 값을 가질 수 있다.
@@ -21,6 +23,7 @@ null 값을 가질 수 없으며, primitive type 을 클래스화 한 Wrapper cl
 
 - 길이가 16bit 인 부호있는 정수형 타입으로, 범위는 -32768 ~ 32767 까지이다.
 - default 값은 0이며, Wrapper class 는 Short 이다.
+
 ### int
 
 - 길이가 32bit 인 부호있는 정수형 타입으로, 범위는 -2147483648 ~ 2147483647 까지이다.
@@ -174,6 +177,7 @@ public class ArrayType {
 
 
 # 변수의 스코프와 라이프타임
+
 변수의 스코프는 변수에 접근할 수 있는 유효 범위/영역을 말하며, 일반적으로 선언된 블록(`{}`) 내에서만 엑세스 될 수 있다.   
 라이프타임은 변수가 메모리에서 살아있는 시간을 의미한다.
 
@@ -270,10 +274,11 @@ intVal 의 값이 1byte 로 표현되는 값이라면 캐스팅을 해도 값이
 
 실수형 타입을 정수형 타입으로 캐스팅 할 때는 소수점 이하 부분은 버려지고, 정수 부분만 저장된다.
 
-자바에서는 데이터 값 검사를 위해 Byte.MIN_VALUE 나 Byte.MAX_VALUE 같은 최대값, 최소값 상수를 제공한다.
+자바에서는 데이터 값 검사를 위해 Byte.MIN_VALUE 나 Byte.MAX_VALUE 같은 최대값, 최소값 상수를 제공한다.
 
 
 # 1차 및 2차 배열 선언
+
 배열이란 같은 자료형의 데이터들을 연속된 공간에 저장하기 위한 자료구조이다.    
 연관된 데이터를 그룹화하여 묶어주는 역할을 하며, 중복된 변수의 선언을 줄여주고, 반복문 등을 이용하여 계산과 같은 과정을 쉽게 처리 할 수 있다.
 
@@ -306,6 +311,44 @@ public class ArrayTest {
 2차원 배열은 스택 영역에 배열의 주소값이 담겨있고, 주소값이 가리키고 있는 힙영역부터 배열의 길이만큼 하위 배열의 주소값이 담겨있다.
 
 # 타입 추론
+
+코드 작성 당시 타입이 정해지지 않았지만, 컴파일러가 그 타입을 유추하는 것이다.   
+Java 10 에서 `var` 라는 Local Variable Type-Inference 가 등장하였다.   
+
+`var` 는 지역 변수(local variable) 이면서 선언과 동시에 초기화가 되어야 한다.   
+따라서 멤버변수, 메소드의 파라미터, 리턴 타입으로 사용이 불가능 하다.
+
+```java
+public class TypeInferenceTest {
+    public static void main(String[] args) {
+        var booleanVal = true;
+        var intVal = 10;
+        var doubleVal = 10.0;
+        var charVal = 'A';
+        var strVal = "문자열입니다.";
+        
+        Object result = booleanVal;
+        System.out.println("booleanVal is " + booleanVal + " instanceof Boolean ? " + (result instanceof Boolean));
+        // booleanVal is true instanceof Boolean ? true
+        
+        result = intVal;
+        System.out.println("intVal is " + intVal + " instanceof Integer ? " + (result instanceof Integer));
+        // intVal is 10 instanceof Integer ? true
+        
+        result = doubleVal;
+        System.out.println("doubleVal is " + doubleVal + " instanceof Double ? " + (result instanceof Double));
+        // doubleVal is 10.0 instanceof Double ? true
+        
+        result = charVal;
+        System.out.println("charVal is " + charVal + " instanceof Character ? " + (result instanceof Character));
+        // charVal is A instanceof Character ? true
+        
+        System.out.println("strVal is " + strVal + " instanceof String ? " + (strVal instanceof String));
+        // strVal is 문자열입니다. instanceof String ? true
+    }
+}
+```
+
 
 
 

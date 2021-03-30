@@ -358,6 +358,95 @@ public class TernaryOperatorTest {
 
 우선 순위가 같은 연산자는 왼쪽에서 오른쪽으로 결합된다.
 
+# switch 연산자
+
+- Java 12 부터 preview 로 업데이트 된 기능이다.
+- Java 13 에서도 preview 지만, `yield` 키워드가 도입 되었고, switch 연산 안에서 값을 리턴 할 수 있다.
+- `switch` 의 `case` 레이블에서 [화살표 연산자(`->`)](#화살표-연산자--) 를 사용 할 수 있고, 여러 개의 case 를 `,`를 구분자로 나열 할 수 있다.
+- case 구문에서 `:` 키워드와 `->` 키워드를 동시에 사용 할 수 없다.
+
+```java
+public class SwitchOperatorTest {
+
+    public static void main(String[] args) {
+        int[] intArray = {1, 2, 3};
+        for(int intVal : intArray) {
+            System.out.println("previousVersion12   : " + previousVersion12(intVal));
+            System.out.println("version12           : " + version12(intVal));
+            System.out.println("afterVersion12      : " + afterVersion12(intVal));
+        }
+
+
+    }
+
+    /**
+     * Java 12 버전 이전의 switch 문
+     * @param intVal
+     * @return
+     */
+    public static String previousVersion12(int intVal) {
+        String result = "";
+        switch(intVal) {
+            case 1 :
+                result = "result is " + 1;
+                break;
+            case 2 :
+                result = "result is " + 2;
+                break;
+            case 3 :
+                result = "result is " + 3;
+                break;
+            default :
+                throw new IllegalStateException("Unexpected value: " + intVal);
+        }
+        return result;
+    }
+
+    /**
+     * Java 12 버전 에서의 switch 연산자 (preview)
+     * @param intVal
+     * @return
+     */
+    public static String version12(int intVal) {
+        String result = switch (intVal) {
+            case 1, 2, 3 -> "result is " + intVal;
+            default -> throw new IllegalStateException("Unexpected value: " + intVal);
+        };
+        return result;
+    }
+
+    /**
+     * Java 13 버전 에서의 switch 연산자 (preview)
+     * @param intVal
+     * @return
+     */
+    public static String afterVersion12(int intVal) {
+        String result = switch(intVal) {
+            case 1,2,3 -> {
+                if(intVal > 1) {
+                    yield "result is " + intVal + " and intVal > 1";
+                }else {
+                    yield "result is " + intVal + " and intVal <= 1";
+                }
+            }
+            default -> throw new IllegalStateException("Unexpected value");
+        };
+        return result;
+    }
+}
+```
+
+```
+previousVersion12   : result is 1
+version12           : result is 1
+afterVersion12      : result is 1 and intVal <= 1
+previousVersion12   : result is 2
+version12           : result is 2
+afterVersion12      : result is 2 and intVal > 1
+previousVersion12   : result is 3
+version12           : result is 3
+afterVersion12      : result is 3 and intVal > 1
+```
 
 
 
@@ -366,3 +455,4 @@ public class TernaryOperatorTest {
 > - [자바의 연산자 및 연산자 우선순](https://toma0912.tistory.com/66)
 > - [자바(Java) instanceof 사용법](https://improver.tistory.com/140)
 > - [[Java-21]화살표 연산자(->)그리고 람다 원리](https://catch-me-java.tistory.com/30)
+> - [3 Switch Expressions](https://docs.oracle.com/en/java/javase/13/language/switch-expressions.html)

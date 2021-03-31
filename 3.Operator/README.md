@@ -311,7 +311,7 @@ public class AssignmentOperatorTest {
 ### 화살표 연산자 (`->`)
 - Java 8 에서 등장한 연산자로, 메소드를 피연산자로 가지고 있는 연산자이다.
 - (매개변수) `->` 메소드 형식으로 이루어져 있으며, 람다식의 기초가 되는 연산자이다.
-- Functional Interface 나 람다식의 개념은 후에 다룰 람다식 주제에서 상세하게 다룰 예정이다.
+- Functional Interface 나 람다식의 개념은 후에 다룰 람다식 주제에서 상세하게 다룰 예정이다. ~~아직 공부를 안해서 자세히 모르겠다..~~
 
 ## 삼항 연산자
 
@@ -341,7 +341,7 @@ public class TernaryOperatorTest {
 
 |우선 순위|연산자|내용|
 |---|----|---|
-|1|최우선 연산자|`()`, `[]`
+|1|최우선 연산자|`()`, `[]`|
 |2|[단항 연산자](#단항-연산자)|`!`, `~`, `+`, `-`, `++`, `--`|
 |3|[곱셈 / 나눗셈 연산자(산술 연산자)](#산술-연산자------)|`*`, `/`, `%`|
 |4|[덧셈 / 뺄셈 연산자(산술 연산자)](#산술-연산자------)|`+`, `-`|
@@ -361,7 +361,7 @@ public class TernaryOperatorTest {
 # switch 연산자
 
 - Java 12 부터 preview 로 업데이트 된 기능이다.
-- Java 13 에서도 preview 지만, `yield` 키워드가 도입 되었고, switch 연산 안에서 값을 리턴 할 수 있다.
+- Java 13 에서도 preview 지만, `yield` 키워드가 도입 되었고, `switch` 연산의 `case` 안에서 블록(`{}`)을 사용할 때 값을 리턴 할 수 있다.
 - `switch` 의 `case` 레이블에서 [화살표 연산자(`->`)](#화살표-연산자--) 를 사용 할 수 있고, 여러 개의 case 를 `,`를 구분자로 나열 할 수 있다.
 - case 구문에서 `:` 키워드와 `->` 키워드를 동시에 사용 할 수 없다.
 
@@ -375,8 +375,17 @@ public class SwitchOperatorTest {
             System.out.println("version12           : " + version12(intVal));
             System.out.println("afterVersion12      : " + afterVersion12(intVal));
         }
-
-
+        for(int intVal : intArray) {
+            // 이전 시간에 배웠던 타입 추론과도 같이 쓸 수 있다.
+            var anonymousVal = switch(intVal) {
+                case 1 -> "String value";
+                case 2 -> 10;
+                case 3 -> 'A';
+                default -> throw new IllegalStateException("Unexpected value: " + intVal);
+            };
+            Object result = anonymousVal;
+            System.out.println("typeInference       : result is " + anonymousVal + " and type is " + result.getClass().getName());
+        }
     }
 
     /**
@@ -385,7 +394,7 @@ public class SwitchOperatorTest {
      * @return
      */
     public static String previousVersion12(int intVal) {
-        String result = "";
+        String result;
         switch(intVal) {
             case 1 :
                 result = "result is " + 1;
@@ -421,7 +430,8 @@ public class SwitchOperatorTest {
      * @return
      */
     public static String afterVersion12(int intVal) {
-        String result = switch(intVal) {
+        // switch 연산자를 직접 return 하는 등 자유롭게 사용 할 수 있다.
+        return switch(intVal) {
             case 1,2,3 -> {
                 if(intVal > 1) {
                     yield "result is " + intVal + " and intVal > 1";
@@ -431,7 +441,6 @@ public class SwitchOperatorTest {
             }
             default -> throw new IllegalStateException("Unexpected value");
         };
-        return result;
     }
 }
 ```
@@ -446,13 +455,16 @@ afterVersion12      : result is 2 and intVal > 1
 previousVersion12   : result is 3
 version12           : result is 3
 afterVersion12      : result is 3 and intVal > 1
+typeInference       : result is String value and type is java.lang.String
+typeInference       : result is 10 and type is java.lang.Integer
+typeInference       : result is A and type is java.lang.Character
 ```
 
 
 
 > 웹문서
 > - [자바(Java)의 기초 박살내기 - 연산자(Operator)](https://raccoonjy.tistory.com/9)
-> - [자바의 연산자 및 연산자 우선순](https://toma0912.tistory.com/66)
+> - [자바의 연산자 및 연산자 우선순위](https://toma0912.tistory.com/66)
 > - [자바(Java) instanceof 사용법](https://improver.tistory.com/140)
 > - [[Java-21]화살표 연산자(->)그리고 람다 원리](https://catch-me-java.tistory.com/30)
 > - [3 Switch Expressions](https://docs.oracle.com/en/java/javase/13/language/switch-expressions.html)

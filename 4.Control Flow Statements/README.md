@@ -174,6 +174,10 @@ intVal is 6
 
 ## 반복문
 
+- 일정한 조건까지 구간을 반복적으로 실행시키는 구문이다.
+- 중복 코드를 줄일 수 있고, 시간을 절약 할 수 있고, 실수를 줄일 수 있다.
+
+
 ### break
 
 - 반복문, switch 문의 흐름을 제어 하기 위해 쓰이는 키워드이다.
@@ -271,22 +275,27 @@ do {
 - 조건식이 false 가 되면 루프를 빠져나온다.
 
 ```java
-public class DoWhileTest {
+public class DoWhileLoopTest {
     public static void main(String[] args) {
         int initialization = 0;
         int sum = 0;
 
-        do {    // do-while 문은 while 의 조건식이 무엇이든 do 의 블록 영역이 한번은 실행된다.
+        do {
             initialization++;
             sum += initialization;
         }while(initialization < 10);
         System.out.println("result is " + sum);
+        
+        do { // do-while 문은 while 의 조건식이 무엇이든 do 의 블록 영역이 한번은 실행된다.
+            System.out.println("한번은 실행된다.");
+        }while(false);
     }
 }
 ```
 
 ```
 result is 55
+한번은 실행된다.
 ```
 
 ### for 문
@@ -297,6 +306,7 @@ for(초기값; 조건식; 증감식) {
 }
 ```
 
+- 주로 반복의 횟수를 알고 있을 때 쓰인다.
 - 초기값과 조건식, 증감식에 따라 블록(`{}`)의 실행 여부가 결정된다.
 - 처음엔 초기값과 조건식으로 블록의 실행 여부를 판단한다.
 - 그 이후엔 증감식을 거치고, 변경된 값과 조건식으로 블록의 실행 여부를 판단한다.
@@ -348,3 +358,4 @@ result is 5
 ```
 
 > - [마로의 Java(자바) 정리 - 7. 제어문(Control Flow Statement)-조건문](https://hoonmaro.tistory.com/17)
+> - [[JAVA] break문, continue문](https://josephian.tistory.com/218)

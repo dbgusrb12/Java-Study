@@ -49,7 +49,7 @@ if(조건식A) {
 ```
 
 - 조건식이 여러개인 if 문이다.
-- 위에 조건식부터 타고 내려오며 true 인 조건식의 블록만 실행 된 후 벗어나고, 모든 조건문이 false 일 때 else 블록이 실행된다.
+- 위에 조건식부터 타고 내려오다가 true 인 조건식의 블록만 실행 된 후 벗어나고, 모든 조건문이 false 일 때는 else 블록이 실행된다.
 - 블록에 들어갈 코드가 한줄이면 블록을 생략 할 수 있다.
 
 ### 중첩 if 문
@@ -319,18 +319,39 @@ public class ForLoopTest {
             sum += initialization;
         }
         System.out.println("result is " + sum);
+
+      int initialization = 1;   // 초기 값에 들어갈 변수를 밖에서 선언 가능하다.
+      int odd = 0;
+      int even = 0;
+
+      // 1부터 10까지 홀수의 합과 짝수의 합
+      for(; ; initialization++) { // 조건식이 없으면 무한루프가 돈다.
+          if(initialization % 2 == 1) {
+              odd += initialization;
+              continue;
+          }
+          even += initialization;
+
+          if(initialization == 10) {    // 무한 루프를 빠져나오기위해 break 키워드 사용
+              break;
+          }
+      }
+      System.out.println("odd is " + odd + " and even is " + even);
+      System.out.println("initialization is " + initialization);    // 초기 값을 밖에서 선언하면 변경 된 초기 값 역시 밖에서 사용 가능
     }
 }
 ```
 
 ```
 result is 55
+odd is 25 and even is 30
+initialization is 10
 ```
 
 ### 향상된 for 문
 
 ```java
-for(자료형 사용 할 변수명 : 배열 or 컬렉션) {
+for(자료형 변수명 : 배열 or 컬렉션) {
     // 배열, 컬렉션의 길이 만큼 실행되는 영역
 }
 ```

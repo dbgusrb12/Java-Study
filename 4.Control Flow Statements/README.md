@@ -71,27 +71,27 @@ public class DecisionMakingStatementsTest {
     public static void main(String[] args) {
         int intVal = 10;
         int intVal2 = 20;
-        
+  
         // 블록에 들어갈 코드가 한줄이면 생략 가능
-        if(intVal + intVal2 >= 30) System.out.println("Condition is true");
-        
-        if(intVal + intVal2 > 30) {
+        if (intVal + intVal2 >= 30) System.out.println("Condition is true");
+  
+        if (intVal + intVal2 > 30) { 
             System.out.println("Condition is true");
-        }else {
+        } else { 
             System.out.println("Condition is false");
         }
-        
-        if(intVal + intVal2 > 30) {
+  
+        if (intVal + intVal2 > 30) { 
             intVal++;   // 조건문이 false 이므로 실행되지 않음.
-        }else if(intVal + intVal2 < 30) {
+        } else if (intVal + intVal2 < 30) {
             intVal--;   // 조건문이 false 이므로 실행되지 않음.
-        }else {
+        } else {
             System.out.println("result is " + (intVal + intVal2));
         }
-        
-        if(intVal >= 10) {
-            if(intVal2 >= 20) {
-              System.out.println("intVal is " + intVal + " and intVal2 is " + intVal2);
+  
+        if (intVal >= 10) {
+            if (intVal2 >= 20) {
+                System.out.println("intVal is " + intVal + " and intVal2 is " + intVal2);
             }
         }
     }
@@ -136,7 +136,7 @@ switch(변수) {
 ```java
 public class DecisionMakingStatementsTest {
     public static void main(String[] args) {
-        int[] intArray = {1,2,3,6};
+        int[] intArray = {1, 2, 3, 6};
         for(int intVal : intArray) {
             switch(intVal) {
                 case 1:
@@ -207,51 +207,51 @@ public class WhileLoopTest {
     public static void main(String[] args) {
         int initialization = 0;
         int sum = 0;
-        while(initialization < 10) {    // while 의 들어가는 조건식은 실행 시킬 조건이다.
+        while (initialization < 10) {    // while 의 들어가는 조건식은 실행 시킬 조건이다.
             initialization++;
             sum += initialization;
         }
         System.out.println("result is " + sum);
-
+  
         initialization = 0;
         sum = 0;
-
-        while(true) {       // 조건식에 true 가 들어가면 무한 루프가 돈다.
+  
+        while (true) {       // 조건식에 true 가 들어가면 무한 루프가 돈다.
             initialization++;
             sum += initialization;
-
-            if(initialization == 10) {  // break 키워드를 쓸 조건식은 빠져 나올 조건이다.
+    
+            if (initialization == 10) {  // break 키워드를 쓸 조건식은 빠져 나올 조건이다.
                 break;      // break 키워드로 반복문을 빠져 나올 수 있다.
             }
         }
         System.out.println("result is " + sum);
-        
+  
         initialization = 0;
         sum = 0;
   
-        while(initialization < 10) {
-          initialization++;
-          if(initialization % 2 == 1) { // continue 키워드를 쓸 조건식은 이후의 코드들을 넘어 갈 조건이다.
-            continue;       // continue 키워드로 이후의 코드들을 실행 시키지 않을 수 있다.
-          }
-          sum += initialization;
+        while (initialization < 10) {
+            initialization++;
+            if (initialization % 2 == 1) { // continue 키워드를 쓸 조건식은 이후의 코드들을 넘어 갈 조건이다.
+                continue;       // continue 키워드로 이후의 코드들을 실행 시키지 않을 수 있다.
+            }
+            sum += initialization;
         }
         System.out.println("result is " + sum);
-
+  
         // 조건식을 잘못 세우면 무한 루프에 빠진다.
-//      while(true) {
-//        initialization++;
-//        if(initialization % 2 == 0) {
-//          System.out.println("continue 실행");
-//          continue;
+//        while(true) {
+//            initialization++;
+//            if (initialization % 2 == 0) {
+//                System.out.println("continue 실행");
+//                continue;
+//            }
+//            if (initialization == 10) {
+//                System.out.println("break 실행");
+//                break;
+//            }
+//            sum += initialization;
 //        }
-//        if(initialization == 10) {
-//          System.out.println("break 실행");
-//          break;
-//        }
-//        sum += initialization;
-//      }
-//      System.out.println("result is " + sum);
+//        System.out.println("result is " + sum);
     }
 }
 ```
@@ -279,13 +279,13 @@ public class DoWhileLoopTest {
     public static void main(String[] args) {
         int initialization = 0;
         int sum = 0;
-
+  
         do {
             initialization++;
             sum += initialization;
         }while(initialization < 10);
         System.out.println("result is " + sum);
-        
+  
         do { // do-while 문은 while 의 조건식이 무엇이든 do 의 블록 영역이 한번은 실행된다.
             System.out.println("한번은 실행된다.");
         }while(false);
@@ -315,29 +315,29 @@ for(초기값; 조건식; 증감식) {
 public class ForLoopTest {
     public static void main(String[] args) {
         int sum = 0;
-        for(int initialization = 1; initialization < 11; initialization++) {
+        for (int initialization = 1; initialization < 11; initialization++) {
             sum += initialization;
         }
         System.out.println("result is " + sum);
-
-      int initialization = 1;   // 초기 값에 들어갈 변수를 밖에서 선언 가능하다.
-      int odd = 0;
-      int even = 0;
-
-      // 1부터 10까지 홀수의 합과 짝수의 합
-      for(; ; initialization++) { // 조건식이 없으면 무한루프가 돈다.
-          if(initialization % 2 == 1) {
-              odd += initialization;
-              continue;
-          }
-          even += initialization;
-
-          if(initialization == 10) {    // 무한 루프를 빠져나오기위해 break 키워드 사용
-              break;
-          }
-      }
-      System.out.println("odd is " + odd + " and even is " + even);
-      System.out.println("initialization is " + initialization);    // 초기 값을 밖에서 선언하면 변경 된 초기 값 역시 밖에서 사용 가능
+  
+        int initialization = 1;   // 초기 값에 들어갈 변수를 밖에서 선언 가능하다.
+        int odd = 0;
+        int even = 0;
+  
+        // 1부터 10까지 홀수의 합과 짝수의 합
+        for (; ; initialization++) { // 조건식이 없으면 무한루프가 돈다.
+            if (initialization % 2 == 1) {
+                odd += initialization;
+                continue;
+            }
+            even += initialization;
+    
+            if (initialization == 10) {    // 무한 루프를 빠져나오기위해 break 키워드 사용
+                break;
+            }
+        }
+        System.out.println("odd is " + odd + " and even is " + even);
+        System.out.println("initialization is " + initialization);    // 초기 값을 밖에서 선언하면 변경 된 초기 값 역시 밖에서 사용 가능
     }
 }
 ```
@@ -362,7 +362,7 @@ for(자료형 변수명 : 배열 or 컬렉션) {
 ```java
 public class ForEachLoopTest {
     public static void main(String[] args) {
-        int[] intArray = {1,2,3,4,5};
+        int[] intArray = {1, 2, 3, 4, 5};
         for(int intVal : intArray) {    // intArray 배열을 돌면서 인덱스의 값을 intVal 에 대입시킨다.
             System.out.println("result is " + intVal);
         }

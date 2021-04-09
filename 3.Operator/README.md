@@ -397,16 +397,16 @@ public class SwitchOperatorTest {
     public static String previousVersion12(int intVal) {
         String result;
         switch(intVal) {
-            case 1 :
+            case 1:
                 result = "result is " + 1;
                 break;
-            case 2 :
+            case 2:
                 result = "result is " + 2;
                 break;
-            case 3 :
+            case 3:
                 result = "result is " + 3;
                 break;
-            default :
+            default:
                 throw new IllegalStateException("Unexpected value: " + intVal);
         }
         return result;
@@ -433,7 +433,7 @@ public class SwitchOperatorTest {
     public static String afterVersion12(int intVal) {
         // switch 연산자를 직접 return 하는 등 자유롭게 사용 할 수 있다.
         return switch(intVal) {
-            case 1,2,3 -> {
+            case 1, 2, 3 -> {
                 if(intVal > 1) {
                     yield "result is " + intVal + " and intVal > 1";
                 }else {

@@ -4,7 +4,7 @@ Data type, Variable, Array
 # Data type 이란?
 
 자바 언어가 처리할 수 있는 데이터의 종류를 뜻하며, 자바의 데이터 타입은 기본형(Primitive type)과 참조형   (Reference type)으로 나뉘어 진다.   
-기본형은 메모리에 값 자체가 저장되고, 참조형의 경우 Heap 영역에 주소값이 참조된 형태로 Java GC에 의해 관리가 된다.
+기본형은 메모리에 값 자체가 저장되고, 참조형의 경우 ~~Heap 영역에 주소값이 참조된 형태로 Java GC에 의해 관리가 된다.~~ Heap 영역에 실제 데이터가 저장되고, 스택 영역에 주소값이 참조된 형태로 Java GC에 의해 관리가 된다.
 
 # 기본형 (Primitive type)
 

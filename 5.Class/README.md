@@ -77,7 +77,7 @@ Class
 }
 ```
 
-이것 외 에도 여러 키워드를 가지고 쓸 수 있다.([클래스, 메서드 정의 시 키워드 순서](#클래스,-메서드-정의-))
+이것 외 에도 여러 키워드를 가지고 쓸 수 있다.([클래스, 메서드 정의 시 키워드 순서](#클래스-메서드-정의-시-키워드-순서))
 
 
 ## 클래스의 구성요소
@@ -136,7 +136,7 @@ public class ClassDefinitionTest {
       로 구성되어 있다.
     */
 
-    public ClassDefinitionTest() {}
+    public ClassDefinitionTest() { }
 
     public ClassDefinitionTest(String fieldName1) {
         this.fieldName1 = fieldName1;

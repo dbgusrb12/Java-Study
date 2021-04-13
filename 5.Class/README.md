@@ -80,26 +80,74 @@ Class
 이것 외 에도 여러 키워드를 가지고 쓸 수 있다.([클래스, 메서드 정의 시 키워드 순서](#클래스-메서드-정의-시-키워드-순서))
 
 
-## 클래스의 구성요소
+# 클래스의 구성요소
 
-### 필드 (Field)
+## 필드 (Field)
 
 클래스에 포함된 변수를 의미한다.
 
 객체의 상태를 추상화 한 값으로,  
 접근제어자를 `private` 으로 설정해놓고, 메소드(Getter/Setter)를 이용해 값을 가져오거나 변경한다.
 
-### 생성자 (Constructor)
+## 생성자 (Constructor)
 
 객체 생성과 동시에 필드값들을 초기화 시켜줄 수 있게 해주는 메소드이다.   
-리턴 값이 클래스명과 같아서 생략하는 것인줄 알았는데 모든 생성자의 리턴값이   
-void 이기 때문에 생략하는 거라고 한다.
+생성자의 이름은 해당 클래스의 이름과 같아야 하며, 리턴 타입을 쓰지 않는다.   
 
-### 메서드 (Method)
+기본적으로 아무 생성자도 구현하지 않았다면, 컴파일 시점에 매개 변수가 아무것도 없는 기본 생성자가 만들어진다.
+
+*리턴 값이 클래스명과 같아서 생략하는 것인줄 알았는데 모든 생성자의 리턴값이   
+void 이기 때문에 생략하는 거라고 한다.*
+
+- .java 파일
+
+```java
+public class Member {
+    
+    private Integer id;
+
+    private String name;
+
+    private Integer age;
+    
+}
+```
+
+- 컴파일 후 .class 파일
+
+```java
+public class Member {
+    private Integer id;
+    private String name;
+    private Integer age;
+
+    public Member() {
+    }
+}
+```
+
+### 생성자 정의하는 방법
+
+```java
+접근제어자 해당클래스이름(초기화 할 변수...) {
+    초기화 명령문;
+}
+```
+
+## 메서드 (Method)
 
 객체의 행동을 추상화 한 값으로,   
 내부에서 쓰는 메서드는 접근제어자를 `private`으로 설정하고,   
 외부에서 접근하는 메서드는 접근제어자를 `public`으로 설정한다.
+
+### 메서드 정의하는 방법
+
+```java
+접근제어자 리턴타입 메소드이름(매개변수...) {
+    실행 할 코드;
+    return 리턴터 할 데이터;    // 리턴 타입에 맞게 리턴한다. 리턴 타입이 void 일 경우, 생략해도 된다.
+}
+```
 
 ```java
 /**
@@ -152,6 +200,7 @@ public class ClassDefinitionTest {
       메서드의 선언 방법은
       접근제어자 리턴타입 메소드이름(매개변수...) {
          실행 될 코드;
+         return ;
       }
       로 구성되어 있다.
     */
@@ -191,6 +240,105 @@ public class CreateObjectTest {
     }
 }
 ```
+
+# `new` 키워드
+
+`new` 키워드는 클래스 타입의 인스턴스(객체)를 생성해주는 역할을 담당한다.   
+`new` 키워드를 통해 메모리(Heap 영역)에 데이터를 저장할 공간을 할당받고   
+그 공간의 참조값을 객체에게 반환하고, 생성자를 호출하게 된다.
+
+# `this` 키워드
+
+Java 에서 사용하는 `this` 키워드는 객체 자신을 나타낸다.   
+해당 class 의 코드 블록(`{}`) 안에서만 사용 가능하며,    
+주로 3가지 용법으로 사용하는데,
+
+## `this.변수명`
+
+그 객체의 변수에 접근하는 방법이다. 주로 생성자, Getter/Setter 메서드에서 쓰인다.
+
+```java
+public class ThisKeywordTest {
+    
+    private String field1;
+    
+    private String field2;
+
+    public ThisKeywordTest(String field1, String field2) {
+        this.field1 = field1;   // 매개 변수의 변수명과 필드 값의 변수명이 같으면 코드 블럭 안에서는 매개 변수가 우선으로 적용된다.
+        this.field2 = field2;   // 그래서 this 키워드를 이용해 객체의 필드값에 접근해 대입한다.
+    }
+
+    public String getField1() {
+        return field1;
+    }
+
+    public void setField1(String field1) {
+        this.field1 = field1;
+    }
+
+    public String getField2() {
+        return field2;
+    }
+
+    public void setField2(String field2) {
+        this.field2 = field2;
+    }
+    
+}
+```
+
+## `this(매개변수...)`
+
+해당 클래스의 생성자를 호출 하는 방법이다.
+여러개의 생성자가 오버로딩 되어 있을 때 중복 코드를 줄일 수 있는 방법이다.
+
+```java
+public class ThisKeywordTest {
+
+    private String field1;
+
+    private String field2;
+
+    public ThisKeywordTest() {
+        this("안녕하세요", "반갑습니다.");          // 생성자 안에서 다른 생성자를 호출 할 수 있다.
+    }
+
+    public ThisKeywordTest(String field1, String field2) {
+        this.field1 = field1;
+        this.field2 = field2;
+    }
+
+}
+```
+
+## `this`
+
+`this` 키워드 그 자체를 쓰는 방법으로, 해당 객체의 참조값을 전달 할 때 쓰인다.
+
+```java
+public class ThisKeywordTest {
+
+    private String field1;
+
+    private String field2;
+
+    public ThisKeywordTest(String field1, String field2) {
+        this.field1 = field1;
+        this.field2 = field2;
+    }
+
+    /**
+     * 메서드를 호출 할 경우 생성 되었던 해당 객체의 참조값을 얻을 수 있다.
+     * @return
+     */
+    public ThisKeywordTest getThisInstance() {
+        return this;
+    }
+
+}
+```
+
 
 > 웹문서
 > - [클래스의 개념](http://www.tcpschool.com/java/java_class_intro)

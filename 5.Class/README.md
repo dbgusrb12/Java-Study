@@ -145,7 +145,7 @@ public class Member {
 ```java
 접근제어자 리턴타입 메소드이름(매개변수...) {
     실행 할 코드;
-    return 리턴터 할 데이터;    // 리턴 타입에 맞게 리턴한다. 리턴 타입이 void 일 경우, 생략해도 된다.
+    return 리턴 할 데이터;    // 리턴 타입에 맞게 리턴한다. 리턴 타입이 void 일 경우, 생략해도 된다.
 }
 ```
 
@@ -184,7 +184,8 @@ public class ClassDefinitionTest {
       로 구성되어 있다.
     */
 
-    public ClassDefinitionTest() { }
+    public ClassDefinitionTest() {
+    }
 
     public ClassDefinitionTest(String fieldName1) {
         this.fieldName1 = fieldName1;

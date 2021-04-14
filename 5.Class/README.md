@@ -153,6 +153,8 @@ public class Member {
 }
 ```
 
+## 정리
+
 ```java
 /**
  * 클래스 정의 하는 방법을 설명하기 위한 클래스이다.
@@ -373,6 +375,7 @@ public class OverloadingTest {
 
     public static void main(String[] args) {
         OverloadingMethod overloadingMethod = new OverloadingMethod();
+        
         System.out.println(overloadingMethod.concat("hello", 1));   // concat(String, int) 메서드 실행
         System.out.println(overloadingMethod.concat(1, 0));         // concat(int, int) 메서드 실행
         System.out.println(overloadingMethod.concat(1.0, 0));       // concat(double, int) 메서드 실행

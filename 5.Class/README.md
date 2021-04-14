@@ -136,7 +136,11 @@ public class Member {
 
 ## 메서드 (Method)
 
-객체의 행동을 추상화 한 값으로,   
+기본적으로 메서드란 어떠한 특정 작업을 수행하기 위한 명령문의 집합이다.   
+메서드의 사용 목적은 중복 코드 방지, 모듈화로 인한 코드의 가독성 향상 등이 있다.   
+하나의 메서드가 하나의 기능만을 수행하도록 작성하는걸 권장한다.   
+
+객체 클래스 내의 쓰임새는 행동을 추상화 한 값으로,   
 내부에서 쓰는 메서드는 접근제어자를 `private`으로 설정하고,   
 외부에서 접근하는 메서드는 접근제어자를 `public`으로 설정한다.
 
@@ -339,6 +343,70 @@ public class ThisKeywordTest {
 
 }
 ```
+
+# 추가로!
+
+## 메서드 오버로딩과 오버라이딩
+
+### 오버로딩(Overloading)
+
+메서드는 해당 메서드의 이름으로만 형식을 지정하는게 아닌 메서드의 이름과 매개변수의 형식을   
+묶어 구분을 하는데, 이 형식을 **Method signature** 라고 한다.
+
+이러한 점 때문에 Java 에서는 한 클래스 내에 이미 사용하려는 이름과 같은 이름을 가진   
+메소드가 있더라도 매개변수의 개수 또는 타입이 다르면 (Method signature 가 다르면),   
+같은 이름을 사용해서 메소드를 정의할 수 있는데, 그것을 **오버로딩(Overloading)** 이라고 한다.
+
+### 오버로딩의 조건
+
+- 메서드의 이름이 같아야한다.
+- 메서드의 리턴 타입이 같아야한다.
+- 메서드의 매개변수 개수, 매개변수 자료형이 달라야 한다.
+
+### 오버로딩을 사용하는 이유
+
+- 같은 기능을 사용하는 메서드를 하나의 이름으로 사용 할 수 있다.
+- 메소드의 이름을 절약 할 수 있다.
+
+```java
+public class OverloadingTest {
+
+    public static void main(String[] args) {
+        OverloadingMethod overloadingMethod = new OverloadingMethod();
+        System.out.println(overloadingMethod.concat("hello", 1));   // concat(String, int) 메서드 실행
+        System.out.println(overloadingMethod.concat(1, 0));         // concat(int, int) 메서드 실행
+        System.out.println(overloadingMethod.concat(1.0, 0));       // concat(double, int) 메서드 실행
+    }
+
+    public static class OverloadingMethod {
+        public String concat(String strVal, int intVal) {
+            return strVal + intVal;
+        }
+
+        public String concat(int intVal, int intVal2) {
+            return String.valueOf(intVal) + intVal2;
+        }
+
+        public String concat(double doubleVal, int intVal) {
+            return String.valueOf(doubleVal) + intVal;
+        }
+    }
+}
+```
+
+```
+hello1
+10
+1.00
+```
+
+### 오버라이딩(Overriding)
+
+부모 클래스의 메서드를 자식 클래스에서 재정의 하여 사용하는 것으로,   
+오버라이딩 할 메서드의 리턴값, 메서드 이름, 매개변수 가 모두 같아야 한다.
+
+오버라이딩에 대해서는 다음 주차에서 더 알아보도록 하겠다.
+
 
 
 > 웹문서

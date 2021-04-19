@@ -461,11 +461,15 @@ Java 에서는 클래스 내부에 또 다른 클래스를 정의 할 수 있는
 
 ```java
 public class NestedClass {
+    
     private String nestedClassField;
+    
     private static String nestedClassField2;
 
     static class StaticNestedClass {
+       
         private String innerClassField;
+        
         private String innerCLassField2;
 
         public StaticNestedClass() {
@@ -489,7 +493,61 @@ public class NestedClassTest {
 
 Non-static Nested Class 라고도 불리며,   
 밖에 있는 클래스의 자원을 모두 사용 할 수 있다.   
-또한, 밖에 있는 클래스에서도 내부 클래스의 인스턴스를 만들러 멤버변수를 사용 할 수 있다.
+또한, 밖에 있는 클래스에서도 내부 클래스의 인스턴스를 만들어 멤버변수를 사용 할 수 있다.
+
+```java
+public class NestedClass {
+    
+    private String nestedClassField;
+    
+    private static String nestedClassField2;
+
+    public void printInnerClassField() {
+        InnerClass innerClass = new InnerClass();                   // 내부 필드 값을 외부에서 접근하려면 인스턴스를 생성 한 후 접근할 수 있다.
+        System.out.println("내부 필드 값 : " + innerClass.nestedClassField);
+    }
+
+    class InnerClass {
+        // Inner Class 의 필드값은 static 키워드 사용이 불가능 하다.
+        // private static String innerClassField;       // 컴파일 에러
+
+        // final 키워드와 같이 쓰는 건 가능하다.
+        private static final String innerClassField2 = "내부 필드 값";
+
+        private String nestedClassField = "내부 필드 값";
+
+        public InnerClass() {
+            nestedClassField = "내부 필드 값";
+            NestedClass.this.nestedClassField = "외부 필드 값";      // 외부의 필드 값과 내부 필드 값의 이름이 같으면 이런 식으로 접근 할 수 있다.
+            nestedClassField2 = "외부 필드 값";
+        }
+
+        public void printField(String nestedClassField) {
+            System.out.println("매개 변수 출력 : " + nestedClassField);
+            System.out.println("내부 필드 값 출력 : " + this.nestedClassField);
+            System.out.println("외부 필드 값 출력 : " + NestedClass.this.nestedClassField);
+        }
+    }
+}
+
+public class NestedClassTest {
+
+    public static void main(String[] args) {
+        NestedClass nestedClass = new NestedClass();
+        nestedClass.printInnerClassField();
+
+        NestedClass.InnerClass innerClass = nestedClass.new InnerClass();
+        innerClass.printField("매개 변수 값");
+    }
+}
+```
+
+```
+내부 필드 값 : 내부 필드 값
+매개 변수 출력 : 매개 변수 값
+내부 필드 값 출력 : 내부 필드 값
+외부 필드 값 출력 : 외부 필드 값
+```
 
 > 웹문서
 > - [클래스의 개념](http://www.tcpschool.com/java/java_class_intro)

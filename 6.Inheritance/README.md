@@ -264,6 +264,7 @@ class Child extends Parent {
 두번 시도하는 경우이다.
 
 밑의 예시는 [토비님의 유튜브 강의](https://www.youtube.com/watch?v=s-tXAHub6vg&feature=youtu.be) 에서 참고한 예제코드이다.
+
 ```java
 public class DoubleDispatchTest {
     
@@ -334,6 +335,257 @@ use Kotlin in Eclipse
 1. Language 인터페이스의 구현체중 어떤 클래스의 useOn 메소드를 사용할지 (Dynamic Dispatch 한번 사용)
 
 2. useOn에 인자로 선택된 Idea 인터페이스에서(Idea 로 구현된 클래스) 어떤 use 메소드를 사용할지 (Dynamic Dispatch 한번 사용)
+
+# 추상 클래스 (Abstract Class)
+
+추상 클래스 (Abstract Class) 란 클래스들의 공통적인 필드나 메서드를   
+추출하여 만들어진 클래스이다.
+
+## 추상 클래스를 사용하는 이유?
+
+- 공통적인 메서드나 필드를 하나로 묶어 유지보수성을 높이고, 통일성을 유지 할 수 있다.
+- 추상 클래스를 상속받는 클래스를 구현 할 때 시간을 절약 할 수 있다.
+- 규격에 맞춰 클래스를 구현 할 수 있다.
+
+## 추상 클래스 특징
+
+### 추상 클래스 정의
+
+`class` 키워드 앞에 `abstract` 키워드를 사용하여 표현한다.
+```java
+abstract class 클래스명 {}
+```
+
+### 추상 메서드 정의
+
+추상 메서드는 리턴타입 앞에 `abstract` 키워드를 사용하여 표현하고,   
+메서드 시그니쳐는 존재하지만, 메서드의 구현부는 존재하지 않는다.
+
+**추상 메서드가 하나라도 존재하면 추상 클래스이다.**
+
+```java
+abstract class 클래스명 { 
+    abstract 리턴타입 메서드명(파라미터...);
+}
+```
+
+### 추상 클래스 상속
+
+추상 클래스를 상속받는 클래스를 구현 할 때는 해당 추상 클래스의 추상 메서드를   
+반드시 오버라이딩 하여 구현해야 한다.
+
+```java
+public class AbstractTest {
+    public static void main(String[] args) {
+        // 각자 오버라이딩 하여 구현 한 메서드를 호출한다.
+        Backend backendDeveloper = new Backend();
+        backendDeveloper.codeSample();
+        Frontend frontendDeveloper = new Frontend();
+        frontendDeveloper.codeSample();
+        
+        // 추상 클래스는 객체 생성이 불가능하다.
+        // Developer developer = new Developer();
+        
+        // 하지만 Anonymous Class 표현식을 써 추상 클래스를 직접 정의 할 수 있다.
+        Developer developer = new Developer() {
+            @Override
+            public void codeSample() {
+                System.out.println("skeleton code");
+            }
+        };
+        developer.codeSample();
+    }
+}
+
+abstract class Developer {
+
+    public String language;
+  
+    public abstract void codeSample();
+
+}
+
+class Backend extends Developer {
+
+    public Backend() {
+        this.language = "Java";
+    }
+  
+    @Override
+    public void codeSample() {
+        // 추상 클래스를 상속 받을 때는 반드시 추상 메서드를 오버라이딩 하여 구현해야 된다.
+        System.out.println("public static void main(String[] args) {}");
+    }
+    
+}
+
+class Frontend extends Developer {
+
+    public Frontend() {
+        this.language = "Vue.js";
+    }
+  
+    @Override
+    public void codeSample() {
+        System.out.println("new Vue({router, store, render: h => h(app)})");
+    }
+    
+}
+```
+```
+public static void main(String[] args) {}
+new Vue({router, store, render: h => h(app)})
+skeleton code
+```
+
+# `final` 키워드
+
+Java 에서 `final` 키워드는 오직 한번만 할당 할 수 있는 entity 를   
+정의 할 때 사용하는 키워드이다.
+
+키워드를 사용하는 곳에 따라 약간씩 다른 기능을 한다.
+
+## `final` 변수
+
+변수의 앞에 `final` 키워드가 붙는 경우로, primitive type, reference type 에   
+따라 다르다.
+
+- Primitive type
+  - `final` 키워드가 붙은 해당 변수는 한번 초기화하면 변경 할 수 없는 상수값이 된다.
+  
+  ```java
+  public class FinalTest {
+      public static void main(String[] args) {
+          // final primitive type 초기화 방법
+          final int intVal = 1;
+          final int intVal2;
+          intVal2 = 10;
+        
+          // intVal = 10;
+          // intVal2 = 20;
+          /* final 키워드가 붙은 primitive type 은 한번 초기화하면 변경 할 수 없다. */
+      }
+  }
+  ```
+
+- Reference type
+  - `final` 키워드가 붙은 해당 변수는 다른 참조 값을 가리키도록 변경 할 수 없다.
+  
+  ```java
+  public class FinalTest {
+      public static void main(String[] args) {
+          // final reference type 초기화 방법
+          final Person person = new Person("HyunGyu", 27);
+          final Person person2;
+          person2 = new Person("HyunGyu", 27);
+  
+          // person = new Person("hyun gyu", 10);
+          /* final 키워드가 붙은 reference type 은 다른 참조 값을 가리키도록 변경 할 수 없다. */
+  
+          // 객체의 속성은 변경 가능하다
+          person.setAge(10); 
+          person2.setName("hyun gyu");
+  
+          System.out.println("person name is " + person.getName() + ", age is " + person.getAge());
+          System.out.println("person2 name is " + person2.getName() + ", age is " + person2.getAge());
+      }
+  }
+  class Person {
+  
+      private String name;
+
+      private int age;
+
+      public Person() {
+      }
+
+      public Person(String name, int age) {
+          this.name = name;
+          this.age = age;
+      }
+
+      public String getName() {
+          return name;
+      }
+
+      public void setName(String name) {
+          this.name = name;
+      }
+
+      public int getAge() {
+          return age;
+      }
+
+      public void setAge(int age) {
+          this.age = age;
+      }
+
+  }
+  ```
+
+- 메서드의 파라미터
+  - 파라미터에 `final` 키워드가 붙으면 메서드 구현부에서 변수 값을 변경 할 수 없다.
+
+- 멤버 변수
+  - 클래스의 멤버 변수에 `final` 키워드가 붙으면 선언과 동시에 초기화를 하거나,   
+    인스턴스 초기화 블록에서 초기화를 하거나, 생성자에서 초기화를 한다.
+  - `static` 키워드가 같이 붙으면 선언과 동시에 초기화를 하거나, 정적 초기화 블록   
+    에서 초기화를 해야한다.
+  - `final` 키워드가 붙어있기 때문에 한가지 방법으로만 초기화 할 수 있다.
+  
+  ```java
+  /**
+   * final 키워드가 있는 멤버 변수의 초기화 방법들을 위한 클래스로,
+   * final 멤버 변수의 중복 초기화로 인한 컴파일 에러를 무시하고 작성하였다.
+   */
+  public class FinalFieldTest {
+      final static String name = "HyunGyu";   // static final 멤버 변수 선언과 동시에 초기화
+      final int age = 20;                     // final 멤버 변수 선언과 동시에 초기화
+  
+      static {
+          // static final 멤버 변수 정적 초기화 블록을 사용해 초기화
+          this.name = "HyunGyu";
+      }
+  
+      {
+          // final 멤버 변수 인스턴스 초기화 블록을 사용해 초기화
+          this.age = 20;
+      }
+  
+      public FinalFieldTest() {
+          // final 멤버 변수 생성자를 사용해 초기화
+          this.age = 20;
+      }
+  
+      public FinalFieldTest(int age) {
+          // final 멤버 변수를 생성자를 이용해 초기화를 할 경우 모든 생성자에 초기화 로직이 있어야한다.
+          this.age = age;
+      }
+  }
+  ```
+
+
+## `final` 메서드
+
+`final` 키워드가 붙은 메서드는 오버라이딩 할 수 없음 을 의미한다.
+
+```java
+class Parent {
+    public final void print() {
+        System.out.println("재정의를 할 수 없습니다.");
+    }
+}
+
+class Child extends Parent {
+
+    // 컴파일 에러가 난다.
+    @Override
+    public void print() {
+      System.out.println("재정의 합니다.");
+    }
+}
+```
+
 
 > 웹문서
 > - [The Java Tutorials(Inheritance)](https://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html)

@@ -52,8 +52,9 @@ Oracle 공식 가이드에 따르면,
 
 - 자식 클래스는 부모 클래스의 private 멤버를 제외한 모든 멤버를 상속 받는다.   
   (생성자는 멤버가 아니므로 상속받지 않는다.)
-
+  
 # `super` 키워드
+
 
 `this` 키워드와 비슷한 기능으로, 부모의 멤버나 생성자에 접근 할 수 있는 키워드이다.   
 
@@ -586,6 +587,49 @@ class Child extends Parent {
 }
 ```
 
+## `final` 클래스
+
+`final` 키워드가 붙은 클래스는 상속 받을 수 없음 을 의미한다.   
+주로, Util 형식의 클래스나 상수 값을 모아놓은 클래스에서 쓰인다.
+
+```java
+final class Parent {
+    String name;
+    String age;
+}
+
+/**
+ * final 키워드가 붙은 클래스를 상속 받으려고 시도할 때 컴파일 에러가 난다.
+ */
+class Child extends Parent {}
+```
+
+# `Object` 클래스
+
+`Object` 클래스는 기본적으로 Java 에서 모든 클래스의 부모 클래스, 즉 최상위 클래스이다.
+
+최상위 클래스이기 때문에 모든 클래스를 받을 수 있고, ([다형성](#다형성-polymorphism))   
+모든 클래스에서 `Object` 클래스의 멤버를 사용 할 수 있다.
+
+## `Object` 클래스의 내장 메서드
+
+여러가지 메서드들 중 `final` 메서드가 아닌 메서드들은 오버라이딩이 가능하다.
+
+|접근지시자(final 여부)|리턴타입|메서드명(파라미터)|설명|
+|---|---|---|---|
+|public final|Class|getClass()|해당 객체의 클래스 객체를 반환한다.|
+|public|int|hashCode()|해당 객체의 해쉬코드 값을 반환한다.|
+|public|boolean|equals(Object obj)|해당 객체와 파라미터의 객체가 같은지 판단한다.|
+|protected|Object|clone()|해당 객체의 복사본을 만들어 반환한다.|
+|public|String|toString()|해당 객체의 대한 정보를 문자열로 반환한다.|
+|public final|void|wait()|가지고 있는 고유 락을 해제하고, notify(), notifyAll() 메서드 호출 전까지 쓰레드를 잠들게 한다.|
+|public final|void|wait(long timeout)|지정된 시간만큼 쓰레드를 잠들게한다. (timeout 은 1/1000 초 단위이다.)|
+|public final|void|wait(long timeout,int nanos)|지정된 시간만큼 쓰레드를 잠들게한다. (nanos 는 1/10<sup>9</sup> 초 단위이다.)
+|public final|void|notify()|wait 상태인 쓰레드 중 임의로 하나를 골라 깨운다.|
+|public final|void|notifyAll()|wait 상태인 쓰레드를 모두 꺠운다.|
+|protected|void|finalize()|객체가 소멸되는 시점에 가비지 컬렉터에 의해 자동으로 호출 되는 메서드이다.
+
+
 
 > 웹문서
 > - [The Java Tutorials(Inheritance)](https://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html)
@@ -593,3 +637,6 @@ class Child extends Parent {
 > - [다형성의 개념](http://tcpschool.com/java/java_polymorphism_concept)
 > - [다이나믹 메소드 디스패치](https://velog.io/@maigumi/Dynamic-Method-Dispatch)
 > - [[JAVA]Static Method Dispatch, Dynamic Method Dispatch, Double Dispatch](https://defacto-standard.tistory.com/413_)
+> - [[Java] java final 키워드](https://gmlwjd9405.github.io/2018/08/06/java-final.html)
+> - [자바에서 final에 대한 이해](https://advenoh.tistory.com/13)
+> - [Object class in Java](https://www.javatpoint.com/object-class)

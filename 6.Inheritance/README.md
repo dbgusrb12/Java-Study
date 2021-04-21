@@ -634,7 +634,7 @@ class Child extends Parent {}
 |public final|void|wait(long timeout)|지정된 시간만큼 쓰레드를 잠들게한다. (timeout 은 1/1000 초 단위이다.)|
 |public final|void|wait(long timeout,int nanos)|지정된 시간만큼 쓰레드를 잠들게한다. (nanos 는 1/10<sup>9</sup> 초 단위이다.)
 |public final|void|notify()|wait 상태인 쓰레드 중 임의로 하나를 골라 깨운다.|
-|public final|void|notifyAll()|wait 상태인 쓰레드를 모두 꺠운다.|
+|public final|void|notifyAll()|wait 상태인 쓰레드를 모두 깨운다.|
 |protected|void|finalize()|객체가 소멸되는 시점에 가비지 컬렉터에 의해 자동으로 호출 되는 메서드이다.
 
 

@@ -21,40 +21,45 @@ Oracle 공식 가이드에 따르면,
 
 # 상속의 특징
 
-- `extends` 키워드를 통해 이루어진다.
-  
-  ```java
-  class 자식클래스 extends 부모클래스 {}
-  ```
-  
-- 한번에 여러 클래스를 상속 받을 수 없다. (single inheritance)
-  
-  ```java
-  class 자식클래스 extends 부모클래스A, 부모클래스B {} // 불가능
-  ```
-  
-- 부모 클래스가 명시적으로 작성되어 있지 않은 모든 클래스는 암묵적으로 `Object` 클래스를 상속받는다.   
-  (모든 클래스는 `Object` 클래스의 서브 클래스이다.)
-  
-  ```java
-  // 명시적인 상속 관계가 없는 클래스는 Object 클래스를 상속 받는다.
-  class 클래스이름 /* extends Object */ {} // 생략 된 코드 
-  ```
+### `extends` 키워드를 통해 이루어진다.
 
-- 상속 받은 클래스를 상속 받아 클래스를 구현 할 수 있다. (Multi-level inheritance)
+```java
+class 자식클래스 extends 부모클래스 {}
+```
+  
+## Single Inheritance
 
-  ```java
-  // 상속의 횟수는 제한이 없다.
-  class A {}
-  class B extends A {}
-  class C extends B {}
-  ```
+한번에 여러 클래스를 상속 받을 수 없다.
 
-- 자식 클래스는 부모 클래스의 private 멤버를 제외한 모든 멤버를 상속 받는다.   
-  (생성자는 멤버가 아니므로 상속받지 않는다.)
+```java
+class 자식클래스 extends 부모클래스A, 부모클래스B {} // 불가능
+```
+  
+## 모든 클래스는 `Object` 클래스의 서브 클래스이다.
+
+부모 클래스가 명시적으로 작성되어 있지 않은 모든 클래스는 암묵적으로 `Object` 클래스를 상속받는다.
+  
+```java
+// 명시적인 상속 관계가 없는 클래스는 Object 클래스를 상속 받는다.
+class 클래스이름 /* extends Object */ {} // 생략 된 코드 
+```
+
+## Multi-level inheritance
+
+상속 받은 클래스를 상속 받아 클래스를 구현 할 수 있다. (상속의 상속의 상속...)
+
+```java
+// 상속의 횟수는 제한이 없다.
+class A {}
+class B extends A {}
+class C extends B {}
+```
+
+## 부모 클래스의 `private` 멤버를 제외한 모든 멤버를 상속 받는다.
+
+생성자는 멤버가 아니므로 상속받지 않는다.
   
 # `super` 키워드
-
 
 `this` 키워드와 비슷한 기능으로, 부모의 멤버나 생성자에 접근 할 수 있는 키워드이다.   
 
@@ -133,7 +138,7 @@ HyunGyu
 - 메서드 이름, 파라미터, 리턴 타입이 모두 같아야 한다.
 - 접근 제어자는 부모 클래스의 메서드 보다 넓거나, 같아야 한다.
 - 부모 클래스의 메서드보다 더 큰 범위의 예외를 선언 할 수 없다.
-- @Override 어노테이션을 넣으면 부모 클래스의 메서드가 없을 때 컴파일 에러가 난다.   
+- `@Override` 어노테이션을 넣으면 부모 클래스의 메서드가 없을 때 컴파일 에러가 난다.   
   (오타를 방지 할 수 있다.)
 
 ## 오버라이딩을 사용하는 이유
@@ -451,119 +456,122 @@ Java 에서 `final` 키워드는 오직 한번만 할당 할 수 있는 entity �
 변수의 앞에 `final` 키워드가 붙는 경우로, primitive type, reference type 에   
 따라 다르다.
 
-- Primitive type
-  - `final` 키워드가 붙은 해당 변수는 한번 초기화하면 변경 할 수 없는 상수값이 된다.
-  
-  ```java
-  public class FinalTest {
-      public static void main(String[] args) {
-          // final primitive type 초기화 방법
-          final int intVal = 1;
-          final int intVal2;
-          intVal2 = 10;
-        
-          // intVal = 10;
-          // intVal2 = 20;
-          /* final 키워드가 붙은 primitive type 은 한번 초기화하면 변경 할 수 없다. */
-      }
-  }
-  ```
+### Primitive type
 
-- Reference type
-  - `final` 키워드가 붙은 해당 변수는 다른 참조 값을 가리키도록 변경 할 수 없다.
-  
-  ```java
-  public class FinalTest {
-      public static void main(String[] args) {
-          // final reference type 초기화 방법
-          final Person person = new Person("HyunGyu", 27);
-          final Person person2;
-          person2 = new Person("HyunGyu", 27);
-  
-          // person = new Person("hyun gyu", 10);
-          /* final 키워드가 붙은 reference type 은 다른 참조 값을 가리키도록 변경 할 수 없다. */
-  
-          // 객체의 속성은 변경 가능하다
-          person.setAge(10); 
-          person2.setName("hyun gyu");
-  
-          System.out.println("person name is " + person.getName() + ", age is " + person.getAge());
-          System.out.println("person2 name is " + person2.getName() + ", age is " + person2.getAge());
-      }
-  }
-  class Person {
-  
-      private String name;
+`final` 키워드가 붙은 해당 변수는 한번 초기화하면 변경 할 수 없는 상수값이 된다.
 
-      private int age;
+```java
+public class FinalTest {
+    public static void main(String[] args) {
+        // final primitive type 초기화 방법
+        final int intVal = 1;
+        final int intVal2;
+        intVal2 = 10;
+      
+        // intVal = 10;
+        // intVal2 = 20;
+        /* final 키워드가 붙은 primitive type 은 한번 초기화하면 변경 할 수 없다. */
+    }
+}
+```
 
-      public Person() {
-      }
+### Reference type
 
-      public Person(String name, int age) {
-          this.name = name;
-          this.age = age;
-      }
-
-      public String getName() {
-          return name;
-      }
-
-      public void setName(String name) {
-          this.name = name;
-      }
-
-      public int getAge() {
-          return age;
-      }
-
-      public void setAge(int age) {
-          this.age = age;
-      }
-
-  }
-  ```
-
-- 메서드의 파라미터
-  - 파라미터에 `final` 키워드가 붙으면 메서드 구현부에서 변수 값을 변경 할 수 없다.
-
-- 멤버 변수
-  - 클래스의 멤버 변수에 `final` 키워드가 붙으면 선언과 동시에 초기화를 하거나,   
-    인스턴스 초기화 블록에서 초기화를 하거나, 생성자에서 초기화를 한다.
-  - `static` 키워드가 같이 붙으면 선언과 동시에 초기화를 하거나, 정적 초기화 블록   
-    에서 초기화를 해야한다.
-  - `final` 키워드가 붙어있기 때문에 한가지 방법으로만 초기화 할 수 있다.
+`final` 키워드가 붙은 해당 변수는 다른 참조 값을 가리키도록 변경 할 수 없다.
   
-  ```java
-  /**
-   * final 키워드가 있는 멤버 변수의 초기화 방법들을 위한 클래스로,
-   * final 멤버 변수의 중복 초기화로 인한 컴파일 에러를 무시하고 작성하였다.
-   */
-  public class FinalFieldTest {
-      final static String name = "HyunGyu";   // static final 멤버 변수 선언과 동시에 초기화
-      final int age = 20;                     // final 멤버 변수 선언과 동시에 초기화
+```java
+public class FinalTest {
+    public static void main(String[] args) {
+        // final reference type 초기화 방법
+        final Person person = new Person("HyunGyu", 27);
+        final Person person2;
+        person2 = new Person("HyunGyu", 27);
+
+        // person = new Person("hyun gyu", 10);
+        /* final 키워드가 붙은 reference type 은 다른 참조 값을 가리키도록 변경 할 수 없다. */
+
+        // 객체의 속성은 변경 가능하다
+        person.setAge(10); 
+        person2.setName("hyun gyu");
+
+        System.out.println("person name is " + person.getName() + ", age is " + person.getAge());
+        System.out.println("person2 name is " + person2.getName() + ", age is " + person2.getAge());
+    }
+}
+class Person {
+
+    private String name;
+
+    private int age;
+
+    public Person() {
+    }
+
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+}
+```
+
+### 메서드의 파라미터
+
+파라미터에 `final` 키워드가 붙으면 메서드 구현부에서 변수 값을 변경 할 수 없다.
+
+### 멤버 변수
+- 클래스의 멤버 변수에 `final` 키워드가 붙으면 선언과 동시에 초기화를 하거나,   
+  인스턴스 초기화 블록에서 초기화를 하거나, 생성자에서 초기화를 한다.
+- `static` 키워드가 같이 붙으면 선언과 동시에 초기화를 하거나, 정적 초기화 블록   
+  에서 초기화를 해야한다.
+- `final` 키워드가 붙어있기 때문에 한가지 방법으로만 초기화 할 수 있다.
   
-      static {
-          // static final 멤버 변수 정적 초기화 블록을 사용해 초기화
-          this.name = "HyunGyu";
-      }
-  
-      {
-          // final 멤버 변수 인스턴스 초기화 블록을 사용해 초기화
-          this.age = 20;
-      }
-  
-      public FinalFieldTest() {
-          // final 멤버 변수 생성자를 사용해 초기화
-          this.age = 20;
-      }
-  
-      public FinalFieldTest(int age) {
-          // final 멤버 변수를 생성자를 이용해 초기화를 할 경우 모든 생성자에 초기화 로직이 있어야한다.
-          this.age = age;
-      }
-  }
-  ```
+```java
+/**
+ * final 키워드가 있는 멤버 변수의 초기화 방법들을 위한 클래스로,
+ * final 멤버 변수의 중복 초기화로 인한 컴파일 에러를 무시하고 작성하였다.
+ */
+public class FinalFieldTest {
+    final static String name = "HyunGyu";   // static final 변수 선언과 동시에 초기화
+    final int age = 20;                     // final 멤버 변수 선언과 동시에 초기화
+
+    static {
+        // static final 변수 정적 초기화 블록을 사용해 초기화
+        this.name = "HyunGyu";
+    }
+
+    {
+        // final 멤버 변수 인스턴스 초기화 블록을 사용해 초기화
+        this.age = 20;
+    }
+
+    public FinalFieldTest() {
+        // final 멤버 변수 생성자를 사용해 초기화
+        this.age = 20;
+    }
+
+    public FinalFieldTest(int age) {
+        // final 멤버 변수를 생성자를 이용해 초기화를 할 경우 모든 생성자에 초기화 로직이 있어야한다.
+        this.age = age;
+    }
+}
+```
 
 
 ## `final` 메서드

@@ -27,7 +27,7 @@ Oracle 공식 가이드에 따르면,
 class 자식클래스 extends 부모클래스 {}
 ```
   
-## Single Inheritance
+### Single Inheritance
 
 한번에 여러 클래스를 상속 받을 수 없다.
 
@@ -35,7 +35,7 @@ class 자식클래스 extends 부모클래스 {}
 class 자식클래스 extends 부모클래스A, 부모클래스B {} // 불가능
 ```
   
-## 모든 클래스는 `Object` 클래스의 서브 클래스이다.
+### 모든 클래스는 `Object` 클래스의 서브 클래스이다.
 
 부모 클래스가 명시적으로 작성되어 있지 않은 모든 클래스는 암묵적으로 `Object` 클래스를 상속받는다.
   
@@ -44,7 +44,7 @@ class 자식클래스 extends 부모클래스A, 부모클래스B {} // 불가능
 class 클래스이름 /* extends Object */ {} // 생략 된 코드 
 ```
 
-## Multi-level inheritance
+### Multi-level Inheritance
 
 상속 받은 클래스를 상속 받아 클래스를 구현 할 수 있다. (상속의 상속의 상속...)
 
@@ -55,13 +55,15 @@ class B extends A {}
 class C extends B {}
 ```
 
-## 부모 클래스의 `private` 멤버를 제외한 모든 멤버를 상속 받는다.
+### 부모 클래스의 `private` 멤버를 제외한 모든 멤버를 상속 받는다.
 
 생성자는 멤버가 아니므로 상속받지 않는다.
   
 # `super` 키워드
 
 `this` 키워드와 비슷한 기능으로, 부모의 멤버나 생성자에 접근 할 수 있는 키워드이다.   
+`private` 인 멤버나 생성자는 접근 할 수 없다.
+
 
 ## `super()`
 
@@ -276,30 +278,30 @@ public class DoubleDispatchTest {
     
     
     interface Language {
-        void useOn(Idea idea);
+        void useOn(Ide ide);
     }
   
     static class Java implements Language {
         @Override
-        public void useOn(Idea idea) {
-            idea.use(this);
+        public void useOn(Ide ide) {
+            ide.use(this);
         }
     }
   
     static class Kotlin implements Language {
         @Override
-        public void useOn(Idea idea) {
-            idea.use(this);
+        public void useOn(Ide ide) {
+            ide.use(this);
         }
     }
   
-    interface Idea {
+    interface Ide {
         void use(Java java);
     
         void use(Kotlin kotlin);
     }
   
-    static class IntelliJ implements Idea {
+    static class IntelliJ implements Ide {
         @Override
         public void use(Java java) {
             System.out.println("use Java in IntelliJ");
@@ -311,7 +313,7 @@ public class DoubleDispatchTest {
         }
     }
   
-    static class Eclipse implements Idea {
+    static class Eclipse implements Ide {
         @Override
         public void use(Java java) {
             System.out.println("use Java in Eclipse");
@@ -324,9 +326,9 @@ public class DoubleDispatchTest {
     }
     public static void main(String[] args) {
         List<Language> languageList = Arrays.asList(new Java(), new Kotlin());
-        List<Idea> ideaList = Arrays.asList(new IntelliJ(), new Eclipse());
+        List<Ide> ideList = Arrays.asList(new IntelliJ(), new Eclipse());
     
-        languageList.forEach(language -> ideaList.forEach(idea -> language.useOn(idea)));
+        languageList.forEach(language -> ideList.forEach(ide -> language.useOn(ide)));
     }
 }
 ```
@@ -340,7 +342,7 @@ use Kotlin in Eclipse
 
 1. Language 인터페이스의 구현체중 어떤 클래스의 useOn 메소드를 사용할지 (Dynamic Dispatch 한번 사용)
 
-2. useOn에 인자로 선택된 Idea 인터페이스에서(Idea 로 구현된 클래스) 어떤 use 메소드를 사용할지 (Dynamic Dispatch 한번 사용)
+2. useOn에 인자로 선택된 Ide 인터페이스에서(Ide 로 구현된 클래스) 어떤 use 메소드를 사용할지 (Dynamic Dispatch 한번 사용)
 
 # 추상 클래스 (Abstract Class)
 
@@ -358,6 +360,7 @@ use Kotlin in Eclipse
 ### 추상 클래스 정의
 
 `class` 키워드 앞에 `abstract` 키워드를 사용하여 표현한다.
+
 ```java
 abstract class 클래스명 {}
 ```
@@ -529,6 +532,11 @@ class Person {
     }
 
 }
+```
+
+```
+person name is HyunGyu, age is 10
+person2 name is hyun gyu, age is 27
 ```
 
 ### 메서드의 파라미터

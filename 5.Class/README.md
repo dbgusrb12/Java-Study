@@ -435,7 +435,126 @@ hello1
 
 오버라이딩에 대해서는 다음 주차에서 더 알아보도록 하겠다.
 
+## 중첩 클래스 (Nested class)
 
+Java 에서는 클래스 내부에 또 다른 클래스를 정의 할 수 있는데,   
+이런 형식을 중첩 클래스 (Nested class) 라고 한다.
+
+### 중첩 클래스를 사용하는 이유?
+
+- 클래스들의 논리적인 그룹을 정의 하기 위해
+- 캡슐화를 좀 더 향상 시킬 수 있기 때문에
+- 가독성이 향상되고, 유지 보수가 좋아지기 때문에
+
+### 중첩 클래스의 종류
+
+중첩 클래스는 크게 두가지로 나눌 수 있는데,   
+`static` 키워드를 사용한 `Static Nested Class` 와   
+`static` 키워드를 사용하지 않은 `Inner Class` 이다.
+
+### 정적 중첩 클래스 (`Static Nested Class`)
+
+클래스 내부에서 `static` 키워드를 사용해 정의한 클래스이다.   
+일반적으로 선언하는 클래스처럼 사용되며, 패키징을 보다 편하게 하기 위해 사용된다.   
+밖에 있는 클래스의 자원 중 `static` 키워드가 붙어있는 자원만 사용이 가능하며,   
+밖에 있는 클래스의 객체가 없어도 해당 클래스의 객체를 생성 할 수 있다.
+
+#### 참고!
+
+`static` 키워드가 붙지 않은 자원은 인스턴스가 생성 될 때 메모리에 올라가고,   
+`static` 키워드가 붙은 자원은 클래스 로딩 시점에 메모리에 올라간다.   
+그러므로 static nested class 를 사용하는 시점에 일반 자원이 메모리에   
+올라와 있는지 알 수 없기 때문에 일반 자원은 사용이 불가능하다.
+
+```java
+public class NestedClass {
+    
+    private String nestedClassField;
+    
+    private static String nestedClassField2;
+
+    static class StaticNestedClass {
+       
+        private String innerClassField;
+        
+        private String innerCLassField2;
+
+        public StaticNestedClass() {
+            // 외부의 있는 자원을 사용 할 때 static 키워드가 붙어있는 자원만 사용이 가능하다.
+            // nestedClassField = "외부 필드 값 초기화";    // 컴파일 에러
+            nestedClassField2 = "외부 필드 값 초기화";      // static 키워드가 붙어 있는 자원은 사용 가능
+        }
+    }
+}
+
+public class NestedClassTest {
+
+    public static void main(String[] args) {
+        // Static Nested class 의 선언은 이런 식으로 한다.
+        NestedClass.StaticNestedClass staticNestedClass = new NestedClass.StaticNestedClass();
+    }
+}
+```
+
+### 내부 클래스 (Inner Class)
+
+Non-static Nested Class 라고도 불리며,   
+밖에 있는 클래스의 자원을 모두 사용 할 수 있다.   
+또한, 밖에 있는 클래스에서도 내부 클래스의 인스턴스를 만들어 멤버변수를 사용 할 수 있다.
+
+```java
+public class NestedClass {
+    
+    private String nestedClassField;
+    
+    private static String nestedClassField2;
+
+    public void printInnerClassField() {
+        InnerClass innerClass = new InnerClass();                   // 내부 필드 값을 외부에서 접근하려면 인스턴스를 생성 한 후 접근할 수 있다.
+        System.out.println("내부 필드 값 : " + innerClass.nestedClassField);
+    }
+
+    class InnerClass {
+        // Inner Class 의 필드값은 static 키워드 사용이 불가능 하다.
+        // private static String innerClassField;       // 컴파일 에러
+
+        // final 키워드와 같이 쓰는 건 가능하다.
+        private static final String innerClassField2 = "내부 필드 값";
+
+        private String nestedClassField = "내부 필드 값";
+
+        public InnerClass() {
+            nestedClassField = "내부 필드 값";
+            NestedClass.this.nestedClassField = "외부 필드 값";      // 외부의 필드 값과 내부 필드 값의 이름이 같으면 이런 식으로 접근 할 수 있다.
+            nestedClassField2 = "외부 필드 값";
+        }
+
+        public void printField(String nestedClassField) {
+            System.out.println("매개 변수 출력 : " + nestedClassField);
+            System.out.println("내부 필드 값 출력 : " + this.nestedClassField);
+            System.out.println("외부 필드 값 출력 : " + NestedClass.this.nestedClassField);
+        }
+    }
+}
+
+public class NestedClassTest {
+
+    public static void main(String[] args) {
+        NestedClass nestedClass = new NestedClass();
+        nestedClass.printInnerClassField();
+
+        NestedClass.InnerClass innerClass = nestedClass.new InnerClass();
+        innerClass.printField("매개 변수 값");
+    }
+}
+```
+
+```
+내부 필드 값 : 내부 필드 값
+매개 변수 출력 : 매개 변수 값
+내부 필드 값 출력 : 내부 필드 값
+외부 필드 값 출력 : 외부 필드 값
+```
 
 > 웹문서
 > - [클래스의 개념](http://www.tcpschool.com/java/java_class_intro)
@@ -444,3 +563,5 @@ hello1
 > - [[스터디_자바 기본] 21. 생성자(Constructor)](https://programmer-seva.tistory.com/79)
 > - [Java this 키워드](https://library1008.tistory.com/4)
 > - [[Java]오버로딩 & 오버라이딩(Overloading & Overriding)](https://hyoje420.tistory.com/14)
+> - [중첩클래스를 알아보자 (내부클래스, 정적 중첩클래스, 지역클래스, 익명클래스)](https://sjh836.tistory.com/145)
+> - [Nested class](https://github.com/ByungJun25/study/tree/main/java/whiteship-study/5week#nested-class)

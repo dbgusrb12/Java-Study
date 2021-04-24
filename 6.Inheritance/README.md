@@ -645,7 +645,29 @@ class Child extends Parent {}
 |public final|void|notifyAll()|wait 상태인 쓰레드를 모두 깨운다.|
 |protected|void|finalize()|객체가 소멸되는 시점에 가비지 컬렉터에 의해 자동으로 호출 되는 메서드이다.
 
+# 추가로!
 
+## LSP (Liskov Substitution Principle)
+
+리스코프 치환 원칙이란 객체 지향 설계의 5원칙인 SOLID 중 하나로,   
+
+**subclass 의 타입은 언제나 superclass 의 타입으로 교체(치환) 할 수 있어야 된다.**
+
+라는 의미이다.
+
+즉, 하위 클래스의 인스턴스는 상위 클래스 타입의 객체 참조 변수에 대입해   
+상위 클래스의 인스턴스 역할을 수행하는 데 문제가 없어야 한다.
+
+Java 에서 상속이라는 의미는 계층을 기준으로 하는게 아닌 분류를 기준으로 해야한다.   
+기존에 있던 클래스를 확장 하여 새로운 클래스를 만들어야 한다.
+
+- 잘못된 상속 관계 : 아버지와 아들 => 아들은 아버지의 한 종류다?
+- 올바른 상속 관계 : 포유류와 고래 => 고래는 포유류의 한 종류다.
+
+
+
+
+ 
 
 > 웹문서
 > - [The Java Tutorials(Inheritance)](https://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html)

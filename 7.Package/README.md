@@ -204,3 +204,4 @@ public class StaticClass {
 > 웹문서
 > - [9. Java 자바 - 패키지(package)](https://kephilab.tistory.com/52)
 > - [The Java Tutorials(Packages)](https://docs.oracle.com/javase/tutorial/java/package/index.html)
+> - [7주차 과제: 패키지](https://kils-log-of-develop.tistory.com/430)

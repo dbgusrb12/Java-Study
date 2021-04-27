@@ -39,8 +39,14 @@ public class PackageTest {
 ## `package` 키워드가 포함된 클래스 컴파일
 
 패키지가 선언된 클래스 파일을 명령어로 컴파일 할 때에는   
-`javac 자바파일` 이 아닌   
-`javac -d 경로명 자바파일` 로 해야 패키지 폴더가 자동으로 생성된다.
+
+`javac 자바파일`  
+
+이 아닌   
+
+`javac -d 경로명 자바파일`
+
+로 클래스 파일이 들어갈 경로를 지정해야 패키지 폴더가 자동으로 생성된다.
 
 ```
 javac -d . ClassName.java               // 현재 폴더에 생성
@@ -203,8 +209,118 @@ StaticClass
 static method
 ```
 
+# Classpath
+
+클래스패스란 JVM 이나 자바 컴파일러에서 사용하는 파라미터로,   
+클래스나 패키지를 찾을때 사용하는 경로를 의미한다.
+
+앞서 말했던 것처럼 자바는 가장 상위 디렉토리(root) 에서 실행해야 한다는 약속이 있다.   
+그래서 이 상위 디렉토리를 지정해 주는 변수가 바로 classpath 인 것이다.
+
+기본적으로 클래스패스를 따로 설정하지 않으면 현재 디렉토리가 지정되어 클래스를 찾아나간다.
+
+JVM 의 클래스 로더는 클래스패스를 기준으로 클래스 파일들을 찾아나가며   
+프로젝트 마다 루트 디렉토리가 다르고, 라이브러리가 들어있는 디렉토리 역시 다르기 때문에   
+여러 경로들을 콜론(`:`) 또는 세미콜론(`;`)을 구분 값으로 나뉘어진다.
+
+unix 기반 OS는 콜론(`:`), window 는 세미콜론(`;`)을 구분 값으로 가진다.
+
+
+클래스패스를 설정 하는 방법은 두가지가 있는데,
+
+## CLASSPATH 환경 변수를 사용
+ 
+CLASSPATH 라는 환경 변수를 만들어서 JVM 의 클래스 로더로 하여금 이 환경 변수를   
+참조해 클래스를 찾는다.
+
+### MAC OS
+
+mac 에서 CLASSPATH 환경 변수를 설정 할 때에는   
+직접 설정을 하거나, 파일을 만들어 관리 하는 방법이 있다.
+
+#### 직접 명령어를 이용해 설정
+```zsh
+~ > export CLASSPATH={경로명}:{경로명}
+```
+
+#### 파일을 이용해 설정
+
+- 설정을 적용 할 파일을 vi 에디터로 만든다.
+
+```
+// sample_profile 파일
+
+export CLASSPATH={경로명}:{경로명}
+```
+
+- source 명령어를 이용해 파일 실행 및 환경 변수 적용
+
+```zsh
+~ > source {경로명}/파일명
+```
+
+### Window
+
+window 에서 CLASSPATH 환경 변수를 설정 할 때에는
+
+1. 내 컴퓨터 에서 속성 OR 제어판 시스템 등록 정보
+2. 고급탭 클릭
+3. 환경 변수 버튼 클릭
+4. 시스템 변수에서 아래의 두 변수가 있다면 편집, 없다면 새로 만들기 버튼 클릭
+5. JAVA_HOME 환경 변수 설정
+```
+변수 이름 : JAVA_HOME
+변수 값 : JDK 가 설치되어 있는 폴더 전체 경로
+```
+6. CLASSPATH 환경 변수 설정
+```
+변수 이름 : CLASSPATH
+변수 값 : .;%JAVA_HOME%\lib\tools.jar
+```
+
+기본적인 Java 설치 후 환경 변수 설정을 예시로 한 것이며,   
+변수 값에 대한 설명은   
+```
+. : 현재 디렉토리 경로부터 찾는다.
+; : 구분자
+%JAVA_HOME% : 미리 설정해 놓은 JAVA_HOME 환경 변수의 값을 대입한다.
+\lib\tools.jar : 기본적인 jdk 라이브러리의 루트 디렉토리를 설정하여, java 라이브러리 클래스들을 찾는다.
+윈도우에서 디렉토리 경로는 백슬래시(\)로 구분한다.
+```
+
+CLASSPATH 에 새로운 경로를 추가하고 싶다면, 맨 뒤에 `;`을 구분자로 한 뒤   
+원하는 경로를 입력해주면 된다.
+
+## -classpath 옵션을 사용
+
+`java` 나 `javac` 명령어를 사용 할 때 `-classpath` 옵션을 사용해   
+classpath 를 설정하는 방법이다.
+
+### 명령어로 컴파일 할 때
+
+`javac -classpath 경로명 자바파일`   
+
+로 클래스패스로 설정할 경로를 지정하여 컴파일 할 수 있다.
+
+### 명령어로 클래스 파일을 실행 할 때   
+
+`java -classpath 경로명 클래스파일`   
+
+로 클래스패스로 설정할 경로를 지정하여 실행 할 수 있다.
+
+경로명은 앞서 말했던 것과 마찬가지로   
+unix 기반 OS는 콜론(`:`), window 는 세미콜론(`;`)을 구분 값으로 가진다.
+
+`-classpath` 옵션은 줄여서 `-cp` 로도 사용 할 수 있으며, 기능은 그대로이다.
+
+## 우선순위
+
+환경변수 CLASSPATH 와 java 옵션 `-classpath` 가 둘 다 설정되어 있으면   
+java 옵션인 `-classpath` 가 적용된다.
 
 > 웹문서
 > - [9. Java 자바 - 패키지(package)](https://kephilab.tistory.com/52)
 > - [The Java Tutorials(Packages)](https://docs.oracle.com/javase/tutorial/java/package/index.html)
 > - [7주차 과제: 패키지](https://kils-log-of-develop.tistory.com/430)
+> - [macOS Java 환경변수(PATH) 설정 방법](https://whitepaek.tistory.com/28)
+> - [[JAVA] javac 및 java 실행시 주의사항](https://kjk3071.tistory.com/entry/JAVA-javac-%EB%B0%8F-java-%EC%8B%A4%ED%96%89%EC%8B%9C-%EC%A3%BC%EC%9D%98%EC%82%AC%ED%95%AD)

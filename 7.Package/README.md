@@ -300,13 +300,13 @@ classpath 를 설정하는 방법이다.
 
 `javac -classpath 경로명 자바파일`   
 
-로 클래스패스로 설정할 경로를 지정하여 컴파일 할 수 있다.
+명령어로 컴파일 할 때 클래스패스로 설정할 경로를 지정하여 컴파일 할 수 있다.
 
 ### 명령어로 클래스 파일을 실행 할 때   
 
 `java -classpath 경로명 클래스파일`   
 
-로 클래스패스로 설정할 경로를 지정하여 실행 할 수 있다.
+명령어로 클래스 파일을 실행 할 때 클래스패스로 설정할 경로를 지정하여 실행 할 수 있다.
 
 경로명은 앞서 말했던 것과 마찬가지로   
 unix 기반 OS는 콜론(`:`), window 는 세미콜론(`;`)을 구분 값으로 가진다.
@@ -318,9 +318,46 @@ unix 기반 OS는 콜론(`:`), window 는 세미콜론(`;`)을 구분 값으로 
 환경변수 CLASSPATH 와 java 옵션 `-classpath` 가 둘 다 설정되어 있으면   
 java 옵션인 `-classpath` 가 적용된다.
 
+# 접근지시자
+
+클래스 주차에서 설명했던 내용 ([접근제어자](https://github.com/dbgusrb12/Java-Study/tree/master/5.Class#%EC%A0%91%EA%B7%BC-%EC%A0%9C%EC%96%B4%EC%9E%90)) 을 기반으로 추가하려고 한다.  
+
+### 접근 권한
+
+|접근지시자|같은 Class|같은 Package|상속받은 Class|모두|
+|---|---|---|---|---|
+|public|O|O|O|O|
+|protected|O|O|O||
+|(default)|O|O|||
+|private|O||||
+
+## 사용 이유?
+
+일반적으로 Java 의 클래스는 독자적으로 사용되지 않고, 여러 클래스들이 유기적으로   
+상호 작용을 하면서 하나의 프로그램으로 동작한다.
+
+상호 작용을 할 때 잘못된 데이터를 저장하는걸 방지하거나, 보안을 위해서 특정   
+멤버에 대한 접근을 제어 해야 할 떄 사용한다.
+
+## 캡슐화(Encapsulation)
+
+하나의 데이터와 그 데이터를 처리하는 메서드를 하나로 묶어,   
+어떤 클래스를 사용할 때 그 클래스가 제공하는 메서드의 기능만을 알고   
+실제로 그 메서드가 어떻게 움직이는지는 외부에 드러나지 않도록 하는 것을 의미한다.
+
+## 정보 은닉(Information Hiding)
+
+다른 객체로부터 자신의 속성을 숨기는 것을 말하며,   
+클래스의 속성들을 private 으로 만들어 클래스 외부에서 함부로 건드리지   
+못하게 하는 것이다.
+
+인스턴스 변수를 `private` 으로 설정하고, getter/setter 메서드를 만들어   
+인스턴스 변수에 직접적인 접근을 차단하는 것도 캡슐화를 통한 정보 은닉을 위한 것이다.
+
 > 웹문서
 > - [9. Java 자바 - 패키지(package)](https://kephilab.tistory.com/52)
 > - [The Java Tutorials(Packages)](https://docs.oracle.com/javase/tutorial/java/package/index.html)
 > - [7주차 과제: 패키지](https://kils-log-of-develop.tistory.com/430)
 > - [macOS Java 환경변수(PATH) 설정 방법](https://whitepaek.tistory.com/28)
 > - [[JAVA] javac 및 java 실행시 주의사항](https://kjk3071.tistory.com/entry/JAVA-javac-%EB%B0%8F-java-%EC%8B%A4%ED%96%89%EC%8B%9C-%EC%A3%BC%EC%9D%98%EC%82%AC%ED%95%AD)
+> - [[Java] 자바의 접근 지정자(Access Modifier)](https://ccm3.net/archives/20557)

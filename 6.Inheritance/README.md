@@ -645,6 +645,102 @@ class Child extends Parent {}
 |public final|void|notifyAll()|wait 상태인 쓰레드를 모두 깨운다.|
 |protected|void|finalize()|객체가 소멸되는 시점에 가비지 컬렉터에 의해 자동으로 호출 되는 메서드이다.
 
+# 추가로!
+
+## LSP (Liskov Substitution Principle)
+
+리스코프 치환 원칙이란 객체 지향 설계의 5원칙인 SOLID 중 하나로,   
+
+**subclass 의 타입은 언제나 superclass 의 타입으로 교체(치환) 할 수 있어야 된다.**
+
+라는 의미이다.
+
+즉, 하위 클래스의 인스턴스는 상위 클래스 타입의 객체 참조 변수에 대입해   
+상위 클래스의 인스턴스 역할을 수행하는 데 문제가 없어야 한다.
+
+Java 에서 상속이라는 의미는 계층을 기준으로 하는게 아닌 분류를 기준으로 해야한다.   
+기존에 있던 클래스를 확장 하여 새로운 클래스를 만들어야 한다.
+
+- 잘못된 상속 관계 : 아버지와 아들 => 아들은 아버지의 한 종류다?
+- 올바른 상속 관계 : 포유류와 고래 => 고래는 포유류의 한 종류다.
+
+포유류라는 클래스를 만들 때 포유류는 아래와 같은 조건을 만족해야한다.
+
+- 포유류는 알을 낳지 않고 새끼를 낳는다.
+- 포유류는 젖을 먹이고, 폐를 통해 호흡한다.
+- 포유류는 체온이 일정한 정온 동물이고, 털이나 두꺼운 피부로 덮혀있다.
+
+위의 조건에서 원숭이라는 단어를 포유류 대신 넣어도 조건에 문제가 없다.   
+그러므로 원숭이라는 클래스는 포유류의 하위 클래스가 될 수 있는 것이다.   
+
+하지만 오리너구리를 대입해보면 말이 되지 않는 것을 알 수 있다. (알을 낳기 때문)   
+오리너구리는 포유류와 유사한 습성을 지니고 있어 생물학적으로는 포유류지만,   
+LSP 관점(프로그래밍적 관점)에서는 일관성에 위배되기 때문에 포유류가 아니게 되는 것이다.
+
+이렇듯 객체 지향은 인간이 실세계를 보면서 느끼고 논리적으로 이해한 것과 똑같이   
+프로그래밍하는 게 목적이기 때문에 논리적으로 맞아 떨어져야한다.
+
+
+```java
+public class Bag {
+    private int price;
+  
+    public Bag() {
+    }
+  
+    public int getPrice() {
+        return this.price;
+    }
+  
+    public void setPrice(int price) {
+        this.price = price;
+    }
+}
+
+public class DiscountedBag extends Bag {
+
+    private double discountedRate;
+  
+    public void setDiscountedRate(double discountedRate) {
+        this.discountedRate = discountedRate;
+    }
+  
+    @Override
+    public int getPrice() {
+        return (int) (super.getPrice() * (1 - discountedRate));
+    }
+}
+```
+
+위의 예시는 LSP 원칙에 위배되는 코드이다.   
+`DiscountedBag` 클래스를 `Bag` 클래스로 치환 했을 때 동일한 역할을 수행해야 하지만,   
+`discountedRate` 필드값의 값이 0이 아닐 경우 결과 값 자체가 달라지기 때문이다.   
+
+올바른 코드로 바꾸려면 많은 방법이 있겠지만,
+
+```java
+public class DiscountedBag extends Bag {
+
+    private double discountedRate;
+  
+    public void setDiscountedRate(double discountedRate) {
+        this.discountedRate = discountedRate;
+    }
+    
+    public int getDiscountedPrice() {
+        return (int) (super.getPrice() * (1 - discountedRate));
+    }
+}
+```
+
+이렇게 부모 클래스의 메서드를 재정의하지 않고, 할인된 가격을 리턴하는 새로운 메서드를   
+만드는 식으로 해결 할 수 있다.
+
+서브 클래스가 슈퍼 클래스의 책임을 무시하거나 재정의하지 않고 확장을 수행하는 것 (피터코드의 상속 규칙)이 중요하다.
+
+실제로 리스코프 치환 원칙을 지키는 가장 쉬운 방법은 **슈퍼클래스의 메서드를   
+서브클래스에서 오버라이딩 하지 않는 것** 이라고 한다.
+
 
 
 > 웹문서
@@ -656,3 +752,5 @@ class Child extends Parent {}
 > - [[Java] java final 키워드](https://gmlwjd9405.github.io/2018/08/06/java-final.html)
 > - [자바에서 final에 대한 이해](https://advenoh.tistory.com/13)
 > - [Object class in Java](https://www.javatpoint.com/object-class)
+> - [[소프트웨어/SOLID] 리스코브 치환 법칙(LSP)](https://sticky32.tistory.com/entry/%EC%86%8C%ED%94%84%ED%8A%B8%EC%9B%A8%EC%96%B4SOLID-%EB%A6%AC%EC%8A%A4%EC%BD%94%EB%B8%8C-%EC%B9%98%ED%99%98-%EB%B2%95%EC%B9%99)
+> - [[Java]객체지향 5대 원칙 SOLID](https://ozofweird.tistory.com/entry/Java-%EA%B0%9D%EC%B2%B4%EC%A7%80%ED%96%A5-5%EB%8C%80-%EC%9B%90%EC%B9%99-SOLID)

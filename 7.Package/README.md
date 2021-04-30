@@ -10,6 +10,25 @@ Package
 
 - 패키지는 클래스의 일부분이고, 클래스를 유일하게 만들어주는 식별자 역할을 한다.   
 - 같은 이름의 클래스일지라도, 패키지가 다르면 충돌을 피할 수 있다.
+- 형식은 `패키지명.클래스명` 이다.
+
+```java
+package com.hyungyu.sample;
+
+public class FullyQualifiedClassName {
+}
+
+package com.hyungyu.sample.test;
+
+public class FqcnTest {
+    public static void main(String[] args) {
+        // FQCN 의 형식은 패키지.클래스명 이고, 이런 형식을 사용하여 다른 패키지의 같은 클래스 이름으로 정의를 해도 충돌을 피할 수 있다.
+        com.hyungyu.sample.FullyQualifiedClassName fqcn = new com.hyungyu.sample.FullyQualifiedClassName();
+    }
+}
+```
+
+
 
 ### Naming Conventions
 
@@ -81,7 +100,7 @@ public class CompileTest {
 자바는 가장 상위 디렉토리(root) 에서 실행해야 한다는 약속이 있기 때문에,   
 컴파일을 한 디렉토리가 아닌, 해당 하위 패키지에서 실행을 할 경우 에러가 나는 것을 볼 수 있다.
 
-따라서, 최상위 루트 디렉토리에서 `java 패키지명.클래스명` 으로 실행을 해야한다.
+따라서, 최상위 루트 디렉토리에서 `java Fully qualified class name` 으로 실행을 해야한다.
 
 # `import` 키워드
 
@@ -120,7 +139,7 @@ public class ExportClass {
 
 ## `import` 키워드를 사용해 가져오기
 
-가져와야 하는 클래스의 `import 풀패키지명.클래스명;` 으로 가져 올 수 있으며,   
+가져와야 하는 클래스의 `import Fully qualified class name;` 으로 가져 올 수 있으며,   
 `package` 키워드의 뒤에 오게된다.
 
 asterisk(`*`) 라는 와일드 카드를 사용 할 수 있고, 해당 패키지의 모든 클래스를 가져온다.   

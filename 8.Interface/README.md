@@ -70,7 +70,7 @@ public interface InterfaceTest {
 
 - 클래스에서 인터페이스를 상속받을 수 없고, 인터페이스에서 인터페이스를 구현 할 수 없다.
 
-인터페이스의 구성과 클래스의 상속을 생각해보면 이해가 편하다.
+[인터페이스의 구성](#인터페이스의-구성) 과 [클래스의 상속](https://github.com/dbgusrb12/Java-Study/tree/study/6.Inheritance) 을 생각해보면 이해가 편하다.
 
 밑의 두 인터페이스를 예시로 들면,
 

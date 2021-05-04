@@ -11,8 +11,8 @@ Interface
 - 객체가 어떻게 구성되어야 하는지 정리한 설계도 역할을 한다.
 - 객체의 다형성을 높혀준다.
 - 개발 코드를 직접 수정하지 않고도, 사용하고 있는 객체만 변경할 수 있다.
-- 인터페이스는 클래스와 다르게 다중 상속이 가능하다. (인터페이스는 상속이 아니라 구현한다고 한다.)
-- 인터페이스를 구현하는 클래스는 반드시 인터페이스의 추상 메서드를 구현 해야한다.
+- 인터페이스는 클래스와 다르게 다중 상속이 가능하다.
+- 인터페이스를 구현하는 클래스는 반드시 인터페이스의 선언 된 모든 메서드를 구현 해야한다.
 
 
 # 인터페이스 정의하는 방법
@@ -33,12 +33,14 @@ Interface
 
 ## 인터페이스의 구성
 
-인터페이스의 구성은 Java 8 이전에는 상수, 추상메서드만 가질 수 있었지만,   
-Java 8 이후부터는 기본 메서드, 정적 메서드를 가질 수 있게 되었다.
+인터페이스는 상수, 추상메서드, 기본메서드, 정적메서드를 가질 수 있다.
+
+Java 8 이전에는 상수, 추상메서드만 가질 수 있었지만,   
+Java 8 이후부터는 기본메서드, 정적메서드를 가질 수 있게 되었다.
 
 추상메서드는 구현부가 없고,   
-기본 메서드는 `default` 키워드를 통해 정의되고,   
-정적 메서드는 `static` 키워드를 통해 정의된다.
+기본메서드는 `default` 키워드를 통해 정의되고,   
+정적메서드는 `static` 키워드를 통해 정의된다.
 
 인터페이스의 모든 메서드들은 `public` 키워드를 암시적으로 가지고 있고,   
 모든 인스턴스 변수들은 `public static final` 키워드를 암시적으로 가지고 있어,   
@@ -66,9 +68,7 @@ public interface InterfaceTest {
 
 - 인터페이스를 구현 할 때는 `implements` 키워드를 사용한다.
 
-- 인터페이스에서 다른 인터페이스를 상속 받을 때는 `extends` 키워드를 사용한다.
-
-- 클래스에서 인터페이스를 상속받을 수 없고, 인터페이스에서 인터페이스를 구현 할 수 없다.
+- 인터페이스에서 인터페이스를 구현 할 수 없다.
 
 [인터페이스의 구성](#인터페이스의-구성) 과 [클래스의 상속](https://github.com/dbgusrb12/Java-Study/tree/master/6.Inheritance) 을 생각해보면 이해가 편하다.
 
@@ -104,6 +104,71 @@ public class Human implements Walkable, Flyable {
 }
 ```
 
+# 인터페이스 레퍼런스를 통해 구현체를 사용하는 방법
+
+인터페이스는 `new` 키워드를 사용해 객체를 생성 할 수 없다.   
+하지만, 구현해놓은 구현체를 빌려 객체를 생성 할 수 있다.
+
+인터페이스 레퍼런스를 통해 구현체를 사용 할 경우, 구현체의 다른 메서드들은 사용 할   
+수 없고, 인터페이스로부터 재정의 한 메서드만 사용 할 수 있다.
+
+```java
+public interface Walkable {
+    void walk();
+}
+
+public class Human implements Walkable{
+
+    private String name;
+
+    private int age;
+
+    @Override
+    public void walk() {
+        System.out.println("뚜벅뚜벅");
+    }
+
+    public void fly() {
+        System.out.println("날지 못합니다..");
+    }
+}
+
+public class InterfaceTest {
+    public static void main(String[] args) {
+        Walkable walkable = new Human();
+
+        // 인터페이스 레퍼런스로 구현체를 사용 할 경우, 구현체의 재정의 한 메서드를 사용 할 수 있다.
+        walkable.walk();
+
+        // Walkable 인터페이스로 선언된 객체는 Human 클래스의 다른 메서드를 사용하지 못한다. (컴파일 에러)
+        // walkable.fly();
+    }
+}
+```
+
+# 인터페이스 상속
+
+- 인터페이스에서 다른 인터페이스를 상속 받을 때는 `extends` 키워드를 사용한다.
+
+- 클래스에선 `extends` 키워드로 인터페이스를 상속받을 수 없다. (무조건 `implements` 키워드로 구현만 가능)
+
+- 클래스에서 인터페이스를 구현 할 때 해당 인터페이스에 상속받는 인터페이스들이 있다면,
+  해당 인터페이스와 관계 된 모든 인터페이스에 메서드를 구현해야한다.
+
+```java
+public interface InterfaceParent {
+    void printParent();
+}
+
+public interface ChildInterface extends InterfaceParent {
+    void printChild();
+}
+```
+
+
+기존에 사용하던 인터페이스에 기능을 추가해야 되는 상황이 올 때,   
+해당 인터페이스에 메서드를 추가하면 인터페이스를 구현하는 모든 클래스들에 추가 된   
+메서드를 전부 재정의 해야된다.
 
 > 웹문서
 > - [The Java Tutorials(Interfaces)](https://docs.oracle.com/javase/tutorial/java/IandI/createinterface.html)

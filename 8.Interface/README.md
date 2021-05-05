@@ -170,8 +170,118 @@ public interface ChildInterface extends InterfaceParent {
 해당 인터페이스에 메서드를 추가하면 인터페이스를 구현하는 모든 클래스들에 추가 된   
 메서드를 전부 재정의 해야된다.
 
+이 때 인터페이스 상속을 이용해 해당 인터페이스를 상속받은 인터페이스를 생성 후 생성한   
+인터페이스에 메서드를 추가하는 방식을 사용 할 수 있고,   
+다른 방법은 Java 8 부터 지원하는 default method 를 이용하는 방법이 있다.
+
+# Default Method (기본메서드)
+
+Java 8 부터 등장한 인터페이스의 default method 는 기존 버전의 호환성 문제 때문에   
+나오게 되었다.
+
+일반적인 인터페이스의 메서드와는 다르게 메서드 시그니쳐만 존재하는게 아닌 구현부도 존재하는   
+메서드이다.
+
+default method 는 구현 하는 클래스에서 오버라이딩을 하지 않아도 되며,   
+오버라이딩 하지 않으면 인터페이스의 메서드가 호출되고, 오버라이딩 하게 되면 해당 메서드가   
+호출된다.
+
+`default` 키워드로 표현할 수 있으며, `default` 키워드가 접근 제어자 default 를   
+나타내는게 아니다. (인터페이스의 메서드에 기본 접근 제어자는 `public` 이다.)
+
+```java
+public interface Walkable {
+    void walkSound();
+    public default void walk() { // public 접근제어자는 생략 할 수 있다.
+        System.out.println("걸을 수 있는 다리가 있다.");
+    }
+}
+
+
+public class Human implements Walkable {
+
+    @Override
+    public void walkSound() {
+        System.out.println("뚜벅뚜벅");
+    }
+
+    public static void main(String[] args) {
+        Human human = new Human();
+        human.walkSound();
+        human.walk();       // default method 는 오버라이딩을 하지 않아도 사용 할 수 있다.
+    }
+}
+```
+```
+뚜벅뚜벅
+걸을 다리가 있습니다.
+```
+
+# Static Method (정적메서드)
+
+인터페이스의 정적 메서드 역시 Java 8 에서 등장한 기능이다.   
+인터페이스에서 정적 메서드를 정의 할 수 있다.
+
+정적 메서드는 오버라이딩이 불가능 하며, 인터페이스명.메서드명 으로 호출 할 수 있다.
+
+```java
+public interface StaticMethodTest {
+    static void print() {
+        System.out.println("정적메서드 호출");
+    }
+    default void defaultPrint() {
+        System.out.println("기본메서드 호출");
+    }
+}
+
+public class StaticMethodTestImpl implements StaticMethodTest {
+    public static void main(String[] args) {
+        StaticMethodTestImpl impl = new StaticMethodTestImpl();
+        impl.defaultPrint();        // 인터페이스의 메서드는 기본적으로 호출 할 수 있지만,
+        StaticMethodTest.print();   // 정적 메서드의 경우 인터페이스명.메서드명 으로 호출해야한다.
+    }
+}
+```
+```
+기본메서드 호출
+정적메서드 호출
+```
+
+# Private Method
+
+Java 9 부터 등장한 private method 는 메서드의 접근 지시자가 `private` 인   
+메서드를 말한다.
+
+private method 는 상속이 불가능 하므로, 오버라이딩도 할 수 없고, 인터페이스 내부에서만   
+사용 가능하다.
+
+```java
+public interface PrivateMethodTest {
+  
+    private void print() {
+        System.out.println("private method 호출!");
+    }
+    
+    default void printSample() {
+        print();
+    }
+}
+
+public class PrivateMethodTestImpl implements PrivateMethodTest {
+    public static void main(String[] args) {
+        PrivateMethodTestImpl impl = new PrivateMethodTestImpl();
+        impl.printSample();
+    }
+}
+```
+```
+private method 호출!
+```
+
+
 > 웹문서
 > - [The Java Tutorials(Interfaces)](https://docs.oracle.com/javase/tutorial/java/IandI/createinterface.html)
 > - [자바 인터페이스(Java Interface)는 무엇인가?](https://interconnection.tistory.com/129)
 > - [[JAVA] 인터페이스(Interface)](https://velog.io/@codemcd/%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4Interface)
 > - [[JAVA] 자바 인터페이스란?(Interface)_이 글 하나로 박살내자](https://limkydev.tistory.com/197)
+> - [Private Methods in Interface – Java 9](https://howtodoinjava.com/java9/java9-private-interface-methods/)

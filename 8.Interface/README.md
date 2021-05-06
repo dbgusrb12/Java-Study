@@ -193,7 +193,7 @@ public class ImplementTest implements ChildInterface {
 
 # Default Method (기본메서드)
 
-Java 8 부터 등장한 인터페이스의 default method 는 기존 버전의 호환성 문제 때문에   
+Java 8 부터 등장한 인터페이스의 default method 는 [기존 버전의 호환성 문제](#기존-인터페이스에-새로운-메서드를-추가하는-상황이-올때) 때문에   
 나오게 되었다.
 
 일반적인 인터페이스의 메서드와는 다르게 메서드 시그니쳐만 존재하는게 아닌 구현부도 존재하는   

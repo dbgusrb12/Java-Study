@@ -163,8 +163,25 @@ public interface InterfaceParent {
 public interface ChildInterface extends InterfaceParent {
     void printChild();
 }
+
+/**
+ * 구현 할 인터페이스에 상속 관계가 있으면 그 관계에 해당하는 인터페이스까지 모두
+ * 오버라이딩 해야한다.
+ */
+public class ImplementTest implements ChildInterface {
+    @Override
+    public void printParent() {
+        System.out.println("부모 인터페이스 오버라이딩");
+    }
+    @Override
+    public void printChild() {
+        System.out.println("자식 인터페이스 오버라이딩");
+    }
+}
 ```
 
+
+## 기존 인터페이스에 새로운 메서드를 추가하는 상황이 올때?
 
 기존에 사용하던 인터페이스에 기능을 추가해야 되는 상황이 올 때,   
 해당 인터페이스에 메서드를 추가하면 인터페이스를 구현하는 모든 클래스들에 추가 된   
@@ -214,7 +231,7 @@ public class Human implements Walkable {
 ```
 ```
 뚜벅뚜벅
-걸을 다리가 있습니다.
+걸을 수 있는 다리가 있다.
 ```
 
 # Static Method (정적메서드)
@@ -277,6 +294,43 @@ public class PrivateMethodTestImpl implements PrivateMethodTest {
 ```
 private method 호출!
 ```
+
+# 추가로!
+
+## `Interface` 와 `Abstract Class` 의 차이?
+
+### 추상 클래스
+
+- 추상 메서드가 한개이상 존재하는 클래스
+- `abstract` 키워드를 사용하여 표현하며, 추상 메서드는 자손에서 정의를 해야한다.
+- 상속을 위한 클래스이므로 객체를 생성 할 수 없다.
+- 자손 클래스에서 완성을 유도하기 때문에 **미완성 설계도** 라고도 표현한다.
+
+### 인터페이스
+
+- 추상 메서드의 집합으로 이루어져있다.
+- 추상 클래스와는 다르게 다중 상속, 다중 구현이 가능하다.
+- 추상 클래스가 미완성 설계도라면, 인터페이스는 **기본 설계도** 이다.
+
+### 차이점
+
+추상 클래스와 인터페이스의 가장 큰 차이점은 **사용 용도** 이다.
+
+추상 클래스는 `is-A` 관계이고,   
+인터페이스는 `has-A` 관계이다.
+
+- `is-A` : ~ 는 ~이다.
+- `has-A` : ~ 는 ~를 할 수 있다.
+
+이런 관계를 생각 해 보면
+
+`HyunGyu 는 개발자이고, 자바를 다룰 수 있다.` 
+
+는
+```java
+class HyunGyu extends Developer implements Java
+```
+가 되는 것이다.
 
 
 > 웹문서

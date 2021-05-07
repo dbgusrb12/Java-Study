@@ -144,6 +144,33 @@ public class InterfaceTest {
 }
 ```
 
+## 익명 클래스를 사용하는 법
+
+익명클래스를 이용해 인터페이스 구현체를 구현 할 수 있다.
+
+```java
+public interface Walkable {
+  void walk();
+}
+
+public class InterfaceTest {
+  public static void main(String[] args) {
+      Walkable walkable = new Walkable() {
+          @Override
+          public void walk() {
+                System.out.println("뚜벅뚜벅");
+          }
+      };
+      
+      // 익명 클래스에 구현되어 있는 메서드가 호출 된다.
+      walkable.walk();
+  }
+}
+```
+```
+뚜벅뚜벅
+```
+
 # 인터페이스 상속
 
 - 인터페이스에서 다른 인터페이스를 상속 받을 때는 `extends` 키워드를 사용한다.

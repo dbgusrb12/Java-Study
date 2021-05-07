@@ -22,3 +22,4 @@ JAVA-STUDY
 5. [클래스](https://github.com/dbgusrb12/Java-Study/tree/master/5.Class)
 6. [상속](https://github.com/dbgusrb12/Java-Study/tree/master/6.Inheritance)
 7. [패키지](https://github.com/dbgusrb12/Java-Study/tree/master/7.Package)
+8. [인터페이스](https://github.com/dbgusrb12/Java-Study/tree/master/8.Interface)

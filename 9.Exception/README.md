@@ -15,7 +15,8 @@ Exception
 
 시스템에 비정상적인 현상이 생길 때 발생하는 것이다.   
 이러한 `Error` 는 시스템 레벨에서 발생하는 것이라 심각한 오류지만,   
-개발자가 미리 예측할 수 없기 때문에 애플리케이션에서 오류에 대한 처리를 신경 쓰지 않아도 된다.
+개발자가 미리 예측할 수 없기 때문에 애플리케이션에서 오류에 대한 처리를 할 수 없고,   
+애초에 발생하지 않도록 하는게 중요하다.
 
 # `Exception` , `Error` 계층 구조
 
@@ -25,7 +26,7 @@ Exception
 `Throwable` 클래스는 `Object` 클래스의 자식 클래스이다.
 
 `Error` 클래스에 해당하는 클래스들은 시스템 레벨에서 발생하는 에러이기 때문에,   
-애플리케이션이 동작하는 도중에 `Error` 를 처리 할 수 없고, 컴파일 자체가 되지 않는다.
+애플리케이션이 동작하는 도중에 `Error` 를 처리 할 수 없다.
 
 `Exception` 클래스에 해당하는 클래스들은 개발자가 로직을 추가하여 처리를 할 수 있고,   
 `RuntimeException` 을 기준으로 크게 두가지로 나뉘어지는데,   
@@ -324,7 +325,86 @@ try (사용하고자하는자원 자원명 = 초기화) {
 `java.lang.AutoCloseable` 인터페이스를 구현 한 객체만 매개변수로   
 들어 갈 수 있다.
 
+OutFile.txt
+```text
+Value at: 0 = 0
+Value at: 1 = 1
+Value at: 2 = 2
+Value at: 3 = 3
+Value at: 4 = 4
+Value at: 5 = 5
+Value at: 6 = 6
+Value at: 7 = 7
+Value at: 8 = 8
+
+```
+```java
+public class TryWithResourcesTest {
+    public static void main(String[] args) {
+        
+        // try-with-resources 문법 
+        try (BufferedReader br = new BufferedReader(new FileReader("OutFile.txt"))) { // try 구문의 매개변수로 자원을 넣는다.
+            System.out.println(br.readLine());
+        } catch (FileNotFoundException e) {
+            System.out.println("FileNotFoundException 발생! : " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("IOException 발생! : " + e.getMessage());
+        }
+
+        // try-catch-finally 구문으로 표현 하려면 이렇게 한다.
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader(new FileReader("OutFile.txt"));
+            System.out.println(br.readLine());
+        } catch (FileNotFoundException e) {
+            System.out.println("FileNotFoundException 발생! : " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("IOException 발생! : " + e.getMessage());
+        } finally {
+            if(br != null) {
+                System.out.println("BufferedReader 자원 반납");
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    System.out.println("IOException 발생! : " + e.getMessage());
+                }
+            } else {
+                System.out.println("BufferedReader 가 생성되지 않았습니다.");
+            }
+        }
+    }
+}
+```
+```
+Value at: 0 = 0
+Value at: 0 = 0
+BufferedReader 자원 반납
+```
+
+하지만 `try-with-resources` 문법에서도 `finally` 구문을 사용 할 수 있다.
+
+```java
+public class TryWithResourcesTest {
+    public static void main(String[] args) {
+        
+        try (BufferedReader br = new BufferedReader(new FileReader("OutFile.txt"))) { // try 구문의 매개변수로 자원을 넣는다.
+            System.out.println(br.readLine());
+        } catch (FileNotFoundException e) {
+            System.out.println("FileNotFoundException 발생! : " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("IOException 발생! : " + e.getMessage());
+        } finally {
+            System.out.println("finally 구역 실행");
+        }
+    }
+}
+```
+```
+Value at: 0 = 0
+finally 구역 실행
+```
 
 > 웹문서
 > - [The Java Tutorials(Exception)](https://docs.oracle.com/javase/tutorial/essential/exceptions/index.html)
+> - [Java 예외(Exception) 처리에 대한 작은 생각](https://www.nextree.co.kr/p3239/)
 > - [JAVA의 Exception(예외)이란 무엇인가](https://preamtree.tistory.com/111)

@@ -76,7 +76,7 @@ try {
     // 예외가 발생 될 수 있는 구문
 } catch(예외타입 예외명) {
     // 예외가 발생 됐을 때 실행 될 구문
-} catch(예외타입2 예외염) {
+} catch(예외타입2 예외명) {
     // 예외2가 발생 됐을 때 실행 될 구문
 } finally {
     // try-catch 블럭을 지나 마지막으로 실행 될 코드
@@ -184,6 +184,9 @@ public class TryCatchTest {
 
 이 때, `catch` 구문의 매개변수 예외타입은 암시적으로 `final` 키워드가 포함된다. (변경 불가)
 
+그리고 `|`를 구분자로 여러 타입을 나열 할 때에도   
+앞서 나온 예외 타입의 하위 클래스는 사용 할 수 없다.
+
 ```java
 public class MultipleExceptionCatchTest {
     public static void main(String[] args) {
@@ -197,7 +200,10 @@ public class MultipleExceptionCatchTest {
             
             // e는 암시적으로 final 키워드가 붙어있기 때문에 변경이 불가능 하다. (예시를 위한 코드)
             // e = new ArrayIndexOutOfBoundsException();
-        }
+        } 
+        // 앞서 나온 예외 타입의 하위 타입은 사용 할 수 없다.
+        // catch (Exception | NullPointerException e2) {
+        // }
     }
 }
 ```
@@ -210,7 +216,7 @@ public class MultipleExceptionCatchTest {
 `try-catch-finally` 구문에서 마지막 구역에 해당되며,   
 `try-catch` 구문이 종료 된 후 실행되는 구문이다.
 
-일반적인 경우 `try-catch` 구문이 종료 된 후 무조건 실행 되며,   
+일반적인 경우 `try-catch` 구문이 종료 된 후 무조건 실행 되지만,   
 `try` 또는 `catch` 구문에서 JVM 이 종료되거나, 쓰레드가 중단/중지 되면   
 `finally` 구역은 실행되지 않을 수 있다.
 
@@ -322,7 +328,8 @@ try (사용하고자하는자원 자원명 = 초기화) {
 `try-catch` 구문이 종료 된 후 매개 변수의 자원을 자동으로 close 한다.
 
 하지만, 모든 타입의 자원이 매개변수로 들어 갈 수 있는 것이 아니라,   
-`java.lang.AutoCloseable` 인터페이스를 구현 한 객체만 매개변수로   
+`java.lang.AutoCloseable` 인터페이스나 이 인터페이스를 상속받은   
+`java.io.Closeable` 인터페이스를 구현 한 객체만 매개변수로   
 들어 갈 수 있다.
 
 OutFile.txt
@@ -403,6 +410,102 @@ public class TryWithResourcesTest {
 Value at: 0 = 0
 finally 구역 실행
 ```
+
+`finally` 구문이나 `try-with-resources` 구문 모두   
+`try` 또는 `catch` 구문에서 JVM 이 종료되거나, 쓰레드가 중단/중지 되면   
+`close()` 가 제대로 실행이 되지 않는 것 같다.
+
+```java
+/**
+ * 자원 해제를 테스트 하기 위한 클래스로,
+ * Closeable 을 구현해 close() 메서드를 오버라이딩 하였다.
+ */
+public class CloseSample implements Closeable {
+
+    private String sampleStr;
+
+    public CloseSample() {
+        this.sampleStr = "자원 해제 테스트";
+    }
+
+    public String getSampleStr() {
+        return sampleStr;
+    }
+
+    @Override
+    public void close() throws IOException {
+        System.out.println("close 실행");
+    }
+}
+
+public class TryWithResourcesTest {
+    public static void main(String[] args) {
+        
+        // try-with-resources 구문
+        try (CloseSample closeSample = new CloseSample()) {
+            System.out.println(closeSample.getSampleStr());
+            // 쓰레드를 멈춰놓고 IntelliJ 에서 강제로 프로젝트를 종료시켜 보았다.
+            Thread.sleep(5000);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // try-catch-finally 구문
+        CloseSample closeSample = null;
+        try {
+            closeSample = new CloseSample();
+            System.out.println(closeSample.getSampleStr());
+            // 쓰레드를 멈춰놓고 IntelliJ 에서 강제로 프로젝트를 종료시켜 보았다.
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            System.out.println("InterruptedException 발생! : " + e.getMessage());
+        } finally {
+            if (closeSample != null) {
+                try {
+                    closeSample.close();
+                } catch (IOException e) {
+                    System.out.println("IOException 발생! : " + e.getMessage());
+                }
+            } else {
+                System.out.println("CodeSample 이 생성되지 않았습니다.");
+            }
+        }
+    }
+}
+```
+- 강제 종료 시키지 않았을 때
+```
+자원 해제 테스트
+close 실행
+
+Process finished with exit code 0
+```
+- 강제 종료 시켰을 때
+```
+자원 해제 테스트
+
+Process finished with exit code 130 (interrupted by signal 2: SIGINT)
+```
+
+## `throws`
+
+예외처리 회피 방식에 해당하는 `throws` 키워드는 해당 에러를 직접 해결 하는게 아닌   
+호출한 쪽으로 예외를 던지며, 그에 대한 회피하는 것이다.
+
+메서드 시그니쳐 뒤에 `throws` 키워드를 붙이고 `,`를 구분자로 내보낼 예외들을 나열한다.
+
+```java
+public void methodName() throws 예외타입, 예외타입 {
+    // 메서드 구현부
+}
+```
+
+무책임하게 `throws` 키워드를 남발하는 것은 위험한 일이다.   
+호출한 쪽에서 예외를 받아 처리하도록 하거나, 해당 메서드에서 예외를 던지는게   
+최선의 방법이라는 확신이 있을때만 사용해야한다.
+
 
 > 웹문서
 > - [The Java Tutorials(Exception)](https://docs.oracle.com/javase/tutorial/essential/exceptions/index.html)

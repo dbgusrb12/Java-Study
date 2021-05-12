@@ -506,6 +506,97 @@ public void methodName() throws 예외타입, 예외타입 {
 호출한 쪽에서 예외를 받아 처리하도록 하거나, 해당 메서드에서 예외를 던지는게   
 최선의 방법이라는 확신이 있을때만 사용해야한다.
 
+```java
+public class ThrowsTest {
+    
+    public static void main(String[] args) {
+        ThrowsTest throwsTest = new ThrowsTest();
+        throwsTest.arithmeticExceptionMethod();
+    }
+
+    public void arithmeticExceptionMethod() throws ArithmeticException {
+        int intVal = 0;
+        int intVal2 = 1;
+        System.out.println(intVal2 / intVal);
+    }
+    
+}
+```
+```
+Exception in thread "main" java.lang.ArithmeticException: / by zero
+	at com.company.hg.exception.ExceptionTest.arithmeticExceptionMethod(ExceptionTest.java:13)
+	at com.company.hg.exception.ExceptionTest.main(ExceptionTest.java:7)
+```
+
+`throws` 키워드를 사용해 예외를 회피해도, 결국 호출한 쪽에서 해결하지 않으면   
+에러가 난다.
+
+## `throw`
+
+예외 전환 방식에서 많이 사용하는 `throw` 키워드는 에러를 직접 발생 시키는 키워드이다.   
+특정 상황에 원하는 에러를 발생시키거나, 특정 에러를 원하는 에러로 변경하여 해당 에러에 맞는   
+처리를 할 수 있게 한다.
+
+```java
+throw 예외객체;
+```
+
+`throw` 키워드 뒤에 들어갈 객체는 `Exception`, `Error` 객체와 같이   
+`throwable` 의 하위 객체들만 들어 갈 수 있다.
+
+`Exception`의 하위 클래스의 예외를 발생시킬 수 있고,   
+개발자가 직접 정의한 에러를 발생 시킬수도 있다.
+
+`throw` 한 에러를 `catch` 구문을 사용해 잡을 수도 있고, `throws` 키워드를 통해   
+예외를 던질 수도 있다.
+
+```java
+/**
+ * throw 키워드의 사용 방법에 대한 클래스
+ * 해당 클래스의 예외 처리는 예시로 만들어진 샘플 코드입니다.
+ */
+public class ThrowTest {
+    
+    public static void main(String[] args) {
+        ThrowTest throwTest = new ThrowTest();
+        
+        throwTest.catchMethod(0, 10);
+        throwTest.throwsMethod(0, 20);
+    }
+
+    public void catchMethod(int intVal, int intVal2) {
+        if (intVal == 0) {
+            try {
+                // 에러 발생
+                throw new ArithmeticException();
+            } catch (ArithmeticException e) {
+                System.out.println("intVal 의 값이 0입니다.");
+            }
+        } else {
+            System.out.println(intVal2 / intVal);
+        }
+    }
+
+    public void throwsMethod(int intVal, int intVal2) throws ArithmeticException {
+        if (intVal == 0) {
+            // 에러 발생
+            throw new ArithmeticException();
+        } else {
+            System.out.println(intVal2 / intVal);
+        }
+    }
+}
+```
+```
+intVal 의 값이 0입니다.
+Exception in thread "main" java.lang.ArithmeticException
+	at com.company.hg.exception.ThrowTest.throwsMethod(ThrowTest.java:28)
+	at com.company.hg.exception.ThrowTest.main(ThrowTest.java:9)
+```
+
+
+
+
 
 > 웹문서
 > - [The Java Tutorials(Exception)](https://docs.oracle.com/javase/tutorial/essential/exceptions/index.html)

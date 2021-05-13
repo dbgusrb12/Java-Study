@@ -20,6 +20,11 @@ Exception
 
 # `Exception` , `Error` 계층 구조
 
+Java 에서는 에러들을 제어하기 위해   
+`Exception` 클래스와 `Error` 클래스를 제공한다.
+
+
+
 ## `Throwable` 의 자식
 
 `Exception`, `Error` 는 `Throwable` 클래스를 상속받고 있고,   
@@ -36,7 +41,7 @@ Exception
 `RuntimeException` 과 해당 하위 클래스들을 Unchecked Exception   
 이라고 한다.
 
-## Checked Exception
+### Checked Exception
 
 Checked Exception 은 반드시 처리해야 되는 예외로, 컴파일 단계에서 확인을 한다.
 
@@ -48,7 +53,7 @@ Checked Exception 을 처리하지 않으면 컴파일 자체가 안되는 점�
 기본적으로 Checked Exception 은 예외 발생 시 트랜잭션을 roll-back 하지 않고   
 예외를 발생시킨다.
 
-## Unchecked Exception
+### Unchecked Exception
 
 Unchecked Exception 은 명시적인 처리를 강제하지 않는 예외로,   
 실행 시점 (`Runtime`) 에 확인을 한다.
@@ -64,7 +69,10 @@ Unchecked Exception 은 명시적인 처리를 강제하지 않는 예외로,
 
 # 예외 처리 방법
 
-Java 에서 제공하는 예외 처리는 다양한 방법들이 있다.
+Java 에서 제공하는 예외 처리에 대한 방법은 다양하다.
+
+예외 처리에 필요한 키워드들은 `try`, `catch`, `finally`, `throw`, `throws` 가   
+있으며, 밑에서 자세하게 살펴보겠다.
 
 ## `try-catch-finally`
 
@@ -840,6 +848,11 @@ java.lang.NullPointerException: parseStr is null
 
 
 ## 커스텀한 예외의 대한 시선
+
+커스텀한 예외를 만드는 것에 있어서 긍정적인 시선도 있고, 부정적인 시선도 있는데
+
+개발을 할 때 어떤걸 중요하게 여기냐에 따라 적용하는 코드가 달라질 수 있다는 걸   
+느꼈던 부분이다.
 
 ### 사용자 정의 예외가 필요하다!
 

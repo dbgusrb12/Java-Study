@@ -550,6 +550,11 @@ throw 예외객체;
 `throw` 한 에러를 `catch` 구문을 사용해 잡을 수도 있고, `throws` 키워드를 통해   
 예외를 던질 수도 있다.
 
+Checked exception 의 경우 강제로 발생을 시키면 무조건 `catch`, `throws` 를 이용해   
+예외 처리를 해야하고 (컴파일 자체가 안된다.),   
+Unchecked exception 의 경우 강제로 발생 시켜도 예외 처리를 하지 않아도,   
+컴파일과 실행이 가능하고, 해당 메서드의 행이 실행 될 때 예외가 발생해 프로그램이 멈춘다.
+
 ```java
 /**
  * throw 키워드의 사용 방법에 대한 클래스
@@ -585,6 +590,16 @@ public class ThrowTest {
             System.out.println(intVal2 / intVal);
         }
     }
+
+    public void catchAndThrowsMethod(int intVal, int intVal2) throws RuntimeException {
+        try {
+            // 특정 에러가 발생 했을 때
+            System.out.println(intVal2 / intVal);
+        } catch (ArithmeticException e) {
+            // 다른 에러로 전환 하여 throws 키워드를 통해 내보낼 수 있다.
+            throw new RuntimeException();
+        }
+    }
 }
 ```
 ```
@@ -594,7 +609,251 @@ Exception in thread "main" java.lang.ArithmeticException
 	at com.company.hg.exception.ThrowTest.main(ThrowTest.java:9)
 ```
 
+# 커스텀한 예외를 만드는 방법
 
+발생하는 exception 의 타입을 선택할 때, Java 가 제공하는 exception 을 사용 할 수도   
+있지만, 개발자가 직접 exception 을 정의해서 사용 할 수도 있다.
+
+다시 처음으로 돌아와서, `Throwable` 클래스를 살펴보겠다.
+
+`Throwable` 클래스의 필드값 중 `detailMessage` 라는 `private` 필드값이 있고,   
+`public` 생성자는 4가지가 있다.
+
+```java
+/**
+ * Throwable 클래스의 일부를 가져온 클래스 
+ * 예시를 위해 필요한 값들만 가져온 클래스이다.
+ * 
+ */
+public class Throwable {
+
+    private String detailMessage;
+    
+    public Throwable() {
+        fillInStackTrace();
+    }
+    
+    public Throwable(String message) {
+        fillInStackTrace();
+        detailMessage = message;
+    }
+    
+    public Throwable(String message, Throwable cause) {
+        fillInStackTrace();
+        detailMessage = message;
+        this.cause = cause;
+    }
+    
+    public Throwable(Throwable cause) {
+        // 매개변수 cause 는 chained exception 방식에서 쓰인다. 자세한건 따로 설명하겠다.
+        fillInStackTrace();
+        detailMessage = (cause==null ? null : cause.toString());
+        this.cause = cause;
+    }
+    
+    /* ... */
+}
+```
+
+이 `Throwable` 클래스를 상속받은 `Exception` 클래스와 그 하위 클래스들의 생성자는   
+이런식으로 되어있다.
+
+```java
+/**
+ * Exception 클래스의 일부를 가져온 클래스 
+ * 예시를 위해 필요한 값들만 가져온 클래스이다.
+ */
+public class Exception extends Throwable {
+    public Exception() {
+        super();
+    }
+
+    public Exception(String message) {
+        super(message);
+    }
+
+    public Exception(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public Exception(Throwable cause) {
+        super(cause);
+    }
+}
+```
+
+커스텀한 예외를 만들 때는 이 `Exception` 클래스나 해당 클래스의 하위 클래스를   
+상속받아 작성하면 된다.
+
+Unchecked Exception 인 커스텀 예외를 만들고 싶으면 `RuntimeException` 클래스나   
+해당 클래스의 하위 클래스를 상속받아 만들고,   
+Checked Exception 을 만들고 싶으면 `RuntimeException` 클래스가 아닌 클래스를   
+상속받으면 된다.
+
+어떤 예외 클래스를 상속받느냐에 따라 Checked exception 과 Unchecked exception   
+이 나뉘어지기 때문에, 애플리케이션의 동작 방식에 따라 정의하면 된다.
+
+```java
+/**
+ * custom checked exception 클래스
+ */
+public class MyCheckedException extends Exception {
+
+    public MyCheckedException() {
+        super();
+    }
+
+    public MyCheckedException(String message) {
+        super(message);
+    }
+
+}
+```
+```java
+/**
+ * custom unchecked exception 클래스
+ */
+public class MyUncheckedException extends RuntimeException {
+
+    // custom exception 클래스에 필요한 값을 넣어 사용 할 수 있다.
+    private final int ERR_CODE;
+
+    public MyUncheckedException(String message) {
+        super(message);
+        ERR_CODE = 500;
+    }
+
+    public MyUncheckedException(String message, int errorCode) {
+        super(message);
+        ERR_CODE = errorCode;
+    }
+
+    public int getErrCode() {
+        return this.ERR_CODE;
+    }
+
+}
+```
+
+```java
+public class CustomExceptionTest {
+    public static void main(String[] args) {
+        CustomExceptionTest test = new CustomExceptionTest();
+
+        // 해당 예외는 Unchecked exception 이기 때문에 예외처리를 하지 않아도 컴파일 및 실행이 가능하지만
+        // 런타임에서 해당 예외에 대한 처리가 없을 경우 프로그램이 종료된다.
+        // test.throwsUncheckedException();
+
+        try {
+            test.throwsUncheckedException();
+        } catch (MyUncheckedException e) {
+            System.out.println("error code : " + e.getErrCode() + ", custom error catch");
+        }
+        
+        try {
+            test.throwsUncheckedExceptionWithErrCode(400);
+        } catch (MyUncheckedException e) {
+            System.out.println("error code : " + e.getErrCode() + ", custom error catch");
+        }
+
+        // 해당 예외는 Checked exception 이기 때문에 예외 처리를 하지 않으면 컴파일 시점에서 에러가 난다.
+        // test.throwsCheckedException();
+
+        try {
+            test.throwsCheckedException();
+        } catch (MyCheckedException e) {
+            System.out.println("custom error catch!");
+        }
+    }
+
+    public void throwsUncheckedException() throws MyUncheckedException {
+        throw new MyUncheckedException("Unchecked exception 발생!");
+    }
+
+    public void throwsUncheckedExceptionWithErrCode(int errorCode) throws MyUncheckedException {
+        throw new MyUncheckedException("Unchecked exception 발생", errorCode);
+    }
+    
+    public void throwsCheckedException() throws MyCheckedException {
+        throw new MyCheckedException("Checked exception 발생!");
+    }
+}
+```
+```
+error code : 500, custom error catch
+error code : 400, custom error catch
+custom error catch!
+```
+
+# 추가로!
+
+## Chained Exception
+
+- 예외는 다른 예외를 유발할 수 있다. 예외 A가 예외 B를 발생시켰다면, 예외 A는 B의 원인 예외(cause exception)이다.
+- 원인 예외를 새로운 예외에 등록한 후 다시 새로운 예외를 발생시키는데, 이를 예외 연결 (exception chaining)이라 한다.
+- 예외를 연결하는 이유는 여러 가지 예외를 하나의 큰 분류의 예외로 묶어서 다루기 위함이다.
+- checked exception 을 unchecked exception 으로 포장(wrapping)하는데 유용하게 사용되기도 한다.
+
+이러한 관점에서 Chained Exception 을 사용하는데,   
+`Throwable` 클래스의 `initCause()` 메서드로 하위 예외를 등록하고,   
+`getCause()` 메서드로 하위 예외를 불러 올 수 있다.
+
+```java
+public class ChainedExceptionTest {
+    public static void main(String[] args) {
+        ChainedExceptionTest test = new ChainedExceptionTest();
+
+        try {
+            test.chainedExceptionMethod(null);
+        } catch (NumberFormatException e) {
+            // 해당 stackTrace 가 출력 될 때 원인 예외까지 출력이 된다. (Caused by : 이후)
+            e.printStackTrace();
+            
+            // 원인 예외만 stackTrace 로 찍을 수 있다.
+            e.getCause().printStackTrace();
+        }
+    }
+
+    public void chainedExceptionMethod(String parseStr) throws NumberFormatException {
+        try {
+            Integer.parseInt(parseStr);
+        } catch (NumberFormatException e) {
+            e.initCause(new NullPointerException("parseStr is null"));
+            throw e;
+        }
+    }
+}
+```
+```
+java.lang.NumberFormatException: null
+	at java.base/java.lang.Integer.parseInt(Integer.java:614)
+	at java.base/java.lang.Integer.parseInt(Integer.java:770)
+	at com.company.hg.exception.ChainedExceptionTest.chainedExceptionMethod(ChainedExceptionTest.java:20)
+	at com.company.hg.exception.ChainedExceptionTest.main(ChainedExceptionTest.java:8)
+Caused by: java.lang.NullPointerException: parseStr is null
+	at com.company.hg.exception.ChainedExceptionTest.chainedExceptionMethod(ChainedExceptionTest.java:22)
+	... 1 more
+java.lang.NullPointerException: parseStr is null
+	at com.company.hg.exception.ChainedExceptionTest.chainedExceptionMethod(ChainedExceptionTest.java:22)
+	at com.company.hg.exception.ChainedExceptionTest.main(ChainedExceptionTest.java:8)
+```
+
+
+## 커스텀한 예외의 대한 시선
+
+### 사용자 정의 예외가 필요하다!
+
+- 예외의 이름으로 확실한 정보 전달이 가능하다.
+- 상세한 예외 정보를 전달 할 수 있다.
+- 예외에 대한 응집도가 향상된다.
+- 예외 발생 후처리가 용이하다.
+- 예외 생성 비용을 절감한다.
+
+### 표준 예외를 적극적으로 활용하자!
+
+- 표준 예외의 메세지로도 충분히 의미를 전달 할 수 있다.
+- 표준 예외를 사용하면 가독성이 높아진다.
+- 일일히 예외 클래스를 만들다보면 지나치게 커스텀 예외가 많아질 수 있다.
 
 
 
@@ -602,3 +861,4 @@ Exception in thread "main" java.lang.ArithmeticException
 > - [The Java Tutorials(Exception)](https://docs.oracle.com/javase/tutorial/essential/exceptions/index.html)
 > - [Java 예외(Exception) 처리에 대한 작은 생각](https://www.nextree.co.kr/p3239/)
 > - [JAVA의 Exception(예외)이란 무엇인가](https://preamtree.tistory.com/111)
+> - [custom exception을 언제 써야 할까?](https://woowacourse.github.io/javable/post/2020-08-17-custom-exception/)

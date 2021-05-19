@@ -152,7 +152,105 @@ public enum State {
 }
 ```
 
+## `NEW`
 
+쓰레드의 객체가 셍상되고, 실행되기 전 상태를 의미한다.
+
+쓰레드 객체가 `new` 키워드를 통해 생성은 됐지만, `start()` 메서드가   
+호출 되지 않은 상태이다.
+
+## `Runnable`
+
+쓰레드가 실행중인 상태를 의미한다.
+
+`start()` 메서드가 호출되거나, 멈춰있던 쓰레드가 다시 실행 될 때의 상태이다.
+
+## `BLOCKED`
+
+사용하고자 하는 쓰레드 객체의 락이 풀릴때까지 기다리는 상태를 의미한다.
+
+쓰레드가 실행 중지 상태이고, 모니터 락이 풀리기를 기다리는 상태이다.   
+쓰레드의 동기화와 관련된 개념이고, 동기화에 대한 설명은 뒤에서 하겠다.
+
+## `WAITING`
+
+쓰레드가 대기중인 상태를 의미한다.
+
+`wait()`, `join()`, `sleep()` 등의 메서드가 호출 될 때 대기 상태로 변한다.
+
+[`Object` 클래스의 내장 메서드](https://github.com/dbgusrb12/Java-Study/tree/master/6.Inheritance#object-%ED%81%B4%EB%9E%98%EC%8A%A4%EC%9D%98-%EB%82%B4%EC%9E%A5-%EB%A9%94%EC%84%9C%EB%93%9C) 에 있는 메서드 중,   
+
+`wait()`, `notify()`, `notifyAll()` 메서드가 이 쓰레드의 상태와 관련되어 있는 메서드들이다.
+
+
+## `TIMED_WAITING`
+
+위의 `WAITING` 상태와 같은 상태이다.
+
+다른 점은 특정 시간만큼만 대기하고, 시간이 지나면 다시 쓰레드를 실행한다.
+
+## `TERMINATED`
+
+쓰레드가 종료 된 상태를 의미한다.
+
+쓰레드가 주어진 역할을 다 수행했거나, 강제로 종료를 했을 때 의 상태이다.
+
+# 쓰레드의 우선 순위
+
+쓰레드의 우선 순위는 `Thread` 클래스의 필드 값과 메서드를 보면 알 수 있다.
+
+```java
+/**
+ * Thread 클래스의 일부분을 가져온 클래스이다.
+ */
+public class Thread implements Runnable {
+  
+    private int priority;
+    
+    public static final int MIN_PRIORITY = 1;
+  
+    public static final int NORM_PRIORITY = 5;
+  
+    public static final int MAX_PRIORITY = 10;
+
+    public final void setPriority(int newPriority) {
+        ThreadGroup g;
+        checkAccess();
+        if (newPriority > MAX_PRIORITY || newPriority < MIN_PRIORITY) { 
+            throw new IllegalArgumentException();
+        }
+        if ((g = getThreadGroup()) != null) {
+            if (newPriority > g.getMaxPriority()) {
+                newPriority = g.getMaxPriority();
+            }
+            setPriority0(priority = newPriority);
+        }
+    }
+
+    public final int getPriority() {
+        return priority;
+    }
+  
+    public final void checkAccess() {
+        SecurityManager security = System.getSecurityManager();
+        if (security != null) {
+            security.checkAccess(this);
+        }
+    }
+}
+```
+
+위의 예제 코드를 보면,
+
+`static final` 로 선언된 3개의 필드값을 볼 수 있는데,   
+이 3개의 값은 모든 쓰레드에서 공통으로 쓰이는 필드값이다.
+
+먼저 `MIN_PRIORITY` 는 쓰레드가 가질 수 있는 우선 순위의 최소 값을 나타낸 것이며,   
+`MAX_PRIORITY` 는 쓰레드가 가질 수 있는 우선 순위의 최대 값을 나타낸 것이고,   
+`NORM_PRIORITY` 는 쓰레드가 생성 될 때 생기는 우선 순위의 기본 값을 나타낸 것이다.
+
+해당 쓰레드의 우선 순위는 `priority` 의 값을 통해 알 수 있고,   
+`priority` 는 `getPriority()` , `setPriority()` 메서드를 통해 수정하고, 조회 할 수 있다.
 
 # Main Thread
 
@@ -164,7 +262,11 @@ Java 플랫폼에서는 메모리 관리, 신호 처리와 같은 작업을 수�
 
 이 메인 쓰레드에서 쓰레드를 추가 할 수 있고, 추가한 쓰레드를 관리 할 수 있다.
 
+그리고 이 Main Thread 의 우선 순위는 5이다. (기본값)
 
+# 동기화 (Synchronize)
+
+# 데드락 (Deadlock)
 
 > 웹문서
 > - [The Java Tutorials(Concurrency)](https://docs.oracle.com/javase/tutorial/essential/concurrency/procthread.html)

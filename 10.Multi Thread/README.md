@@ -182,7 +182,6 @@ public enum State {
 
 `wait()`, `notify()`, `notifyAll()` 메서드가 이 쓰레드의 상태와 관련되어 있는 메서드들이다.
 
-
 ## `TIMED_WAITING`
 
 위의 `WAITING` 상태와 같은 상태이다.
@@ -252,6 +251,11 @@ public class Thread implements Runnable {
 해당 쓰레드의 우선 순위는 `priority` 의 값을 통해 알 수 있고,   
 `priority` 는 `getPriority()` , `setPriority()` 메서드를 통해 수정하고, 조회 할 수 있다.
 
+쓰레드의 우선 순위는 절대값이 아닌 상대적인 값이다.
+
+우선 순위가 10인 쓰레드가 우선 순위가 1인 쓰레드보다 10배 빠르게 수행 되는 것이 아닌,   
+실행 큐에 좀 더 많이 포함되어, 작업 시간을 더 많이 할당 받는 것이다.
+
 # Main Thread
 
 Java 플랫폼에서는 메모리 관리, 신호 처리와 같은 작업을 수행하는   
@@ -266,8 +270,461 @@ Java 플랫폼에서는 메모리 관리, 신호 처리와 같은 작업을 수�
 
 # 동기화 (Synchronize)
 
+프로세스 내부의 쓰레드들은 해당 프로세스의 리소스와 메모리를 공유하여 통신한다.
+
+이러한 통신 방식은 효율적이지만, 쓰레드 간섭 이나 메모리 일관성 오류가 발생 할 수 있다.
+
+그래서 이런 에러들을 방지하는데 필요한 개념이 바로 동기화 이다.
+
+Java 에서 이런 동기화를 하는 방법은 3가지가 있는데,
+
+첫번째는 `synchronized` 키워드를 사용하는 방법,   
+두번째는 `Atomic` 클래스를 사용하는 방법,   
+마지막으로 세번째는 `volatile` 키워드를 사용하는 방법이다.
+
+```java
+public class Counter {
+    private int count = 0;
+
+    public void increment() {
+        count++;
+    }
+
+    public void decrement() {
+        count--;
+    }
+
+    public int getCount() {
+        return count;
+    }
+}
+
+public class CountThread extends Thread {
+
+    private Counter counter;
+    private boolean flag;
+  
+    public CountThread(Counter counter, boolean flag) {
+        this.counter = counter;
+        this.flag = flag;
+    }
+  
+    @Override
+    public void run() {
+        for (int i = 0; i < 10000; i++) {
+            if (flag) {
+                counter.increment();
+            } else {
+                counter.decrement();
+            }
+        }
+    }
+}
+
+public class SynchronizeTest {
+
+    public static void main(String[] args) {
+        Counter counter = new Counter();
+    
+        Thread thread1 = new CountThread(counter, true);
+        Thread thread2 = new CountThread(counter, false);
+    
+        thread1.start();
+        thread2.start();
+    
+        try {
+            thread1.join(); // join 메서드를 사용하여 실행 결과 출력을 쓰레드가 다 실행 된 후로 바꿔준다.
+            thread2.join();
+            System.out.println(counter.getCount()); // 실행 결과 출력
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+```
+-523
+```
+
+위 코드를 보면 0이 아닌 계속 다른 값이 나오는 것을 확인 할 수 있다.   
+동시에 같은 데이터를 사용해 읽고 쓰다 보면 쓰레드의 간섭이 심해져 원하는 데이터가 나오지 않는다.
+
+## `synchronized` 키워드
+
+동기화를 하기 위해 필요한 키워드로, 메서드 선언부에 들어가거나,   
+메서드 구현부에서 원하는 로직을 블럭(`{}`)으로 묶어 사용 할 수도 있다.
+
+### synchronized method
+
+`synchronized` 키워드가 메서드 선언부에 들어갔을 때 synchronized method 라고 한다.
+
+synchronized method 는 쓰레드가 해당 메서드로 들어오는 순간   
+인스턴스에 lock 을 걸고, 메서드에서 빠져나가는 순간 lock 을 해제한다.
+
+lock 이 걸린 인스턴스의 메서드는 다른 쓰레드에서 접근 할 수 없다.   
+
+다른 쓰레드에선 lock 이 해제 될 때까지 기다린 후 해제되면 lock 을 걸고,   
+작업을 실행한다.
+
+synchronized method 에서 lock 이 걸리는 주체는 해당 메서드 뿐만 아닌   
+해당 메서드를 가지고있는 인스턴스도 lock 에 걸린다.
+
+```java
+public class Counter {
+    private int count = 0;
+  
+    public synchronized void increment() {  // 메서드 선언부에 synchronized 키워드를 붙인다.
+        count++;
+    }
+  
+    public synchronized void decrement() {
+        count--;
+    }
+  
+    public int getCount() {
+        return count;
+    }
+}
+
+public class CountThread extends Thread {
+
+    private Counter counter;
+    private boolean flag;
+  
+    public CountThread(Counter counter, boolean flag) {
+        this.counter = counter;
+        this.flag = flag;
+    }
+  
+    @Override
+    public void run() {
+        for (int i = 0; i < 10000; i++) {
+            if (flag) {
+                counter.increment();
+            } else {
+                counter.decrement();
+            }
+        }
+    }
+}
+
+public class SynchronizeTest {
+
+    public static void main(String[] args) {
+        Counter counter = new Counter();
+    
+        Thread thread1 = new CountThread(counter, true);
+        Thread thread2 = new CountThread(counter, false);
+
+        thread1.start();
+        thread2.start();
+  
+        try {
+            thread1.join(); // join 메서드를 사용하여 실행 결과 출력을 쓰레드가 다 실행 된 후로 바꿔준다.
+            thread2.join();
+            System.out.println(counter.getCount()); // 실행 결과 출력
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+```
+0
+```
+
+### synchronized block
+
+`synchronized` 키워드가 메서드 구현부에 들어가는 것을 synchronized block 이라고 한다.
+
+synchronized method 가 해당 인스턴스와 메서드 모두 lock 을 거는거라면,   
+synchronized block 은 매개변수에 해당하는 인스턴스와, 해당 블럭(`{}`) 내부의 로직을   
+잠궈준다.
+
+위의 예제를 synchronized block 구문을 사용해 바꾼다면,
+
+```java
+public class Counter {
+    private int count = 0;
+  
+    public void increment() {  // 메서드 선언부에 synchronized 키워드를 붙인다.
+        synchronized (this) {
+            count++;
+        }
+    }
+  
+    public void decrement() {
+        synchronized (this) {
+            count--;
+        }
+    }
+  
+    public int getCount() {
+        return count;
+    }
+}
+
+public class CountThread extends Thread {
+
+    private Counter counter;
+    private boolean flag;
+  
+    public CountThread(Counter counter, boolean flag) {
+        this.counter = counter;
+        this.flag = flag;
+    }
+  
+    @Override
+    public void run() {
+        for (int i = 0; i < 10000; i++) {
+            if (flag) {
+                counter.increment();
+            } else {
+                counter.decrement();
+            }
+        }
+    }
+}
+
+public class SynchronizeTest {
+
+    public static void main(String[] args) {
+        Counter counter = new Counter();
+    
+        Thread thread1 = new CountThread(counter, true);
+        Thread thread2 = new CountThread(counter, false);
+
+        thread1.start();
+        thread2.start();
+  
+        try {
+            thread1.join(); // join 메서드를 사용하여 실행 결과 출력을 쓰레드가 다 실행 된 후로 바꿔준다.
+            thread2.join();
+            System.out.println(counter.getCount()); // 실행 결과 출력
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+이런 식으로 바꿔줄 수 있다.
+
+synchronized block 의 매개변수와 블럭을 잠그는 구문이기 때문에,   
+매개변수에 `this` 가 들어가고, synchronized block 구문 외의 로직이   
+없다면 synchronized method 와 같은 기능을 한다.
+
+## `Atomic` 클래스
+
+`Atomic` 클래스를 이용해 동기화 처리를 할 수 있다.
+
+`synchronized` 의 단점은 해당 로직이 다른 쓰레드의 침범을 받지 않아도   
+일단 lock 을 걸고 시작하기 때문에 비용이 비싸다는 것이다.
+
+자원 경합이 무조건 일어난다는 가정 하에 독점적으로 자원을 잠그는 행위를   
+비관적 잠금(Pessimistic locking) 이라고 한다.
+
+반면에 `Atomic` 클래스는 사용 할 때 내부적으로 CAS(Compare And Swap) 알고리즘을 통한   
+낙관적 잠금 연산을 지원한다.
+
+쓰레드 사이에 같은 자원으로 경쟁 할 일이 잦지 않다는 가정 하에 lock 을   
+미리 걸지 않고, 문제가 발생할때만 자원을 잠그는 행위를   
+낙관적 잠금(Optimistic Lock)이라고 한다.
+
+무조건 lock 을 거는 것 보다 문제를 감지하는 것이 비용이 더 적게 들고,   
+효율적이라고 볼 수 있다.
+
+`Atomic` 클래스들은 일종의 Wrapping 클래스 이고,   
+`java.util.concurrent.atomic` 패키지에 정의되어 있다.
+
+primitive type, reference type 모두 지원하며, 다양한 종류가 있기 때문에   
+전부 설명을 하진 않고, `AtomicInteger` 클래스만 예시로 작성하였다.
+
+```java
+public class AtomicCounter {
+    private AtomicInteger count = new AtomicInteger(0);
+  
+    public void increment() {
+        count.incrementAndGet();
+    }
+  
+    public void decrement() {
+        count.decrementAndGet();
+    }
+  
+    public int getCount() {
+        return count.get();
+    }
+}
+
+public class AtomicThread extends Thread {
+    private AtomicCounter counter;
+    private boolean flag;
+  
+    public AtomicThread(AtomicCounter counter, boolean flag) {
+        this.counter = counter;
+        this.flag = flag;
+    }
+  
+    @Override
+    public void run() {
+        for (int i = 0; i < 10000; i++) {
+            if (flag) {
+                counter.increment();
+            } else {
+                counter.decrement();
+            }
+        }
+    }
+}
+
+public class AtomicTest {
+    public static void main(String[] args) {
+        AtomicCounter counter = new AtomicCounter();
+
+        Thread thread1 = new AtomicThread(counter, true);
+        Thread thread2 = new AtomicThread(counter, false);
+
+        thread1.start();
+        thread2.start();
+
+        try {
+            thread1.join(); // join 메서드를 사용하여 실행 결과 출력을 쓰레드가 다 실행 된 후로 바꿔준다.
+            thread2.join();
+            System.out.println("result is " + counter.getCount()); // 실행 결과 출력
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+## `volatile` 키워드
+
+`volatile` 키워드는 변수의 변경에 대한 가시성을 보장하는 키워드 이다.
+
+멀티 쓰레드 어플리케이션은 성능상의 이유로 Main Memory 에서 변수를 읽고,   
+CPU cache 에 저장하게 된다.
+
+이 때 여러 쓰레드들이 같은 변수를 Read 할 때 CPU cache 에 저장한 값이   
+특정 쓰레드에서 변경을 하면 데이터 불일치가 생기기 때문에,   
+변수를 애초에 Main Memory 에서 직접 읽고, 쓸 수 있게 선언을 해주는 키워드이다.
+
+```java
+public class ShareObject {
+    public int count = 0;
+}
+```
+
+`count` 라는 변수를 Thread1, Thread2 에서 읽어온다면,   
+
+- Main Memory : `count = 0`
+- Thread1 의 CPU cache : `count = 0`
+- Thread2 의 CPU cache : `count = 0`
+
+Thread1 에서 `count` 변수의 값을 바꾼다면,
+
+- Main Memory : `count = 0`
+- Thread1 의 CPU cache : `count = 5`
+- Thread2 의 CPU cache : `count = 0`
+
+이런 상황에서, Thread1 의 CPU cache 에 존재하는 `count` 변수의   
+변화를 언제 적용하는지 알 수 없는 상황에서 Thread2가 `count` 변수를   
+Read 한다면 `count`의 값은 0일수 밖에 없다.
+
+하지만 `volatile` 키워드를 붙인다면,
+
+```java
+public class ShareObject {
+    public volatile int count = 0;
+}
+```
+- Main Memory : `count = 0`
+- Thread1 의 count : `count = 0`
+- Thread2 의 count : `count = 0`
+
+Thread1 에서 `count` 변수 값 변경
+- Main Memory : `count = 5`
+- Thread1 의 count : `count = 5`
+- Thread2 의 count : `count = 5`
+
+Main Memory 에서 직접 READ, WRITE 하기 때문에 값이 일정 할 수 있다.
+
 # 데드락 (Deadlock)
+
+데드락(Deadlock) 이란, 둘 이상의 쓰레드가 서로의 lock 을 획득 하기 위해   
+영원히 대기 상태에 빠지는 현상을 말한다.
+
+예를 들어,   
+A 라는 쓰레드가 A-1 이라는 lock 을 가지고 있고,   
+B 라는 쓰레드가 B-1 이라는 lock 을 가지고 있다고 했을 때,
+
+쓰레드 A 가 A-1 을 가지고 있는 상태로 B-1 을 획득하기 위해 대기하고,   
+쓰레드 B 가 B-1 을 가지고 있는 상태로 A-1 을 획득하기 위해 대기할 때
+
+서로 lock 을 획득 하지 못한 채로 교착 상태(Deadlock) 에 빠지게 된다.
+
+허리를 숙여 인사를 하면 상대방이 대답을 할 때 까지 아무말도 못하는 세상이 있다고 가정하자.   
+이런 세상에서 서로 동시에 허리를 숙여 인사를 하면 어떻게 될까?
+
+```java
+public class StrangeWorld {
+    static class Person {
+        private final String name;
+    
+        public Person(String name) {
+            this.name = name;
+        }
+    
+        public String getName() {
+            return this.name;
+        }
+    
+        public synchronized void bow(Person bower) {
+            System.out.println(bower.getName() + " 이(가) " + this.name + "한테 허리를 숙여 인사를 한다.");
+            bower.bowBack(this);
+        }
+    
+        public synchronized void bowBack(Person bower) {
+            System.out.println(this.name + "이(가) " + bower.getName() + " 의 인사를 받는다.");
+            System.out.println(this.name + " : 네! 안녕하세요~");
+        }
+    }
+
+    public static void main(String[] args) {
+        final Person hyunGyu = new Person("hyunGyu");
+        final Person nick = new Person("nick");
+    
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                hyunGyu.bow(nick);
+            }
+        });
+    
+        Thread thread2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                nick.bow(hyunGyu);
+            }
+        });
+        thread.start();
+        thread2.start();
+    }
+}
+```
+```
+hyunGyu 이(가) nick한테 허리를 숙여 인사를 한다.
+nick 이(가) hyunGyu한테 허리를 숙여 인사를 한다.
+```
+
+허리를 숙인 채로 평생 아무것도 못한채로 교착 상태에 빠지고,   
+이 상황에서 다른 사람이 와서 인사를 한다면 다른 사람 역시 교착 상태에 빠질 것이다.
+
+이러한 상황을 **데드락(Deadlock)** 이라고 한다.
 
 > 웹문서
 > - [The Java Tutorials(Concurrency)](https://docs.oracle.com/javase/tutorial/essential/concurrency/procthread.html)
 > - [스레드의 개념](http://tcpschool.com/java/java_thread_concept)
+> - [[Java] Thread(스레드)에 관한 고찰 - 스레드 관련 코드를 어떻게 짜야할까](https://pjh3749.tistory.com/268)
+> - [자바 volatile 키워드](https://parkcheolu.tistory.com/16)

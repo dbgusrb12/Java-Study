@@ -79,7 +79,7 @@ public class ExtendsThread extends Thread {
         for (int i = 0; i < 5; i++) {
             System.out.println(getName());  // Thread 클래스의 getName() 메서드 호출 현재 쓰레드의 이름을 반환한다.
             try {
-                Thread.sleep(50);           // 쓰레드를 0.5 초 동안 멈춘다.
+                Thread.sleep(500);          // 쓰레드를 0.5 초 동안 멈춘다.
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -97,7 +97,7 @@ public class ImplementsRunnable implements Runnable {
             // Runnable 인터페이스는 추상 메서드인 run() 메서드 밖에 없기 때문에 현재 쓰레드를 가져와 이름을 출력해야한다.
             System.out.println(Thread.currentThread().getName());
             try {
-                Thread.sleep(50);       // 쓰레드를 0.5 초 동안 멈춘다.
+                Thread.sleep(500);      // 쓰레드를 0.5 초 동안 멈춘다.
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -138,9 +138,13 @@ Thread-0
 `Thread` 클래스 내부에 쓰레드의 상태에 대한 상수가 나열되어 있는데,   
 `enum` 으로 되어 있으며, `Thread.State` 로 정의 되어있다.
 
+[`Object` 클래스의 내장 메서드](https://github.com/dbgusrb12/Java-Study/tree/master/6.Inheritance#object-%ED%81%B4%EB%9E%98%EC%8A%A4%EC%9D%98-%EB%82%B4%EC%9E%A5-%EB%A9%94%EC%84%9C%EB%93%9C) 에 있는 메서드 중 쓰레드의 상태를 변화 시키는 메서드는   
+`wait`, `notify`, `notifyAll` 이다.
+
 ```java
 /**
- * Thread 클래스 내부의 State enum 을 추출하였다.
+ * Thread 클래스 내부의 State enum 을 추출하였다. 
+ * 자세한 설명은 Thread 클래스의 State enum 을 보면 된다.
  */
 public enum State {
     NEW,
@@ -154,7 +158,7 @@ public enum State {
 
 ## `NEW`
 
-쓰레드의 객체가 셍상되고, 실행되기 전 상태를 의미한다.
+쓰레드의 객체가 생성되고, 실행되기 전 상태를 의미한다.
 
 쓰레드 객체가 `new` 키워드를 통해 생성은 됐지만, `start()` 메서드가   
 호출 되지 않은 상태이다.
@@ -176,17 +180,30 @@ public enum State {
 
 쓰레드가 대기중인 상태를 의미한다.
 
-`wait()`, `join()`, `sleep()` 등의 메서드가 호출 될 때 대기 상태로 변한다.
+이 상태로 변하는 시점은
 
-[`Object` 클래스의 내장 메서드](https://github.com/dbgusrb12/Java-Study/tree/master/6.Inheritance#object-%ED%81%B4%EB%9E%98%EC%8A%A4%EC%9D%98-%EB%82%B4%EC%9E%A5-%EB%A9%94%EC%84%9C%EB%93%9C) 에 있는 메서드 중,   
+`Object.wait()`,   
+`Thread.join()`,   
+`LockSupport.park()`
 
-`wait()`, `notify()`, `notifyAll()` 메서드가 이 쓰레드의 상태와 관련되어 있는 메서드들이다.
+위의 메서드 들이 호출된 시점이다.
 
 ## `TIMED_WAITING`
 
 위의 `WAITING` 상태와 같은 상태이다.
 
 다른 점은 특정 시간만큼만 대기하고, 시간이 지나면 다시 쓰레드를 실행한다.
+
+이 상태로 변하는 시점은
+
+`Thread.sleep(long millis)`,   
+`Object.wait(long timeoutMillis)`,   
+`Object.wait(long timeoutMillis, int nanos)`,   
+`Thread.join(long millis)`,   
+`LockSupport.parkNanos(Object blocker, long nanos)`,   
+`LockSupport.parkUntil(Object blocker, long deadline)`
+
+위의 메서드 들이 호출된 시점이다.
 
 ## `TERMINATED`
 

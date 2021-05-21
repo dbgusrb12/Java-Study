@@ -24,4 +24,4 @@ JAVA-STUDY
 7. [패키지](https://github.com/dbgusrb12/Java-Study/tree/master/7.Package)
 8. [인터페이스](https://github.com/dbgusrb12/Java-Study/tree/master/8.Interface)
 9. [예외 처리](https://github.com/dbgusrb12/Java-Study/tree/master/9.Exception)
-10. [멀티쓰레드 프로그래밍](https://github.com/dbgusrb12/Java-Study/tree/study/10.Multi%20Thread)
+10. [멀티쓰레드 프로그래밍](https://github.com/dbgusrb12/Java-Study/tree/master/10.Multi%20Thread)

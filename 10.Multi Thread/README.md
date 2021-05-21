@@ -138,7 +138,7 @@ Thread-0
 `Thread` 클래스 내부에 쓰레드의 상태에 대한 상수가 나열되어 있는데,   
 `enum` 으로 되어 있으며, `Thread.State` 로 정의 되어있다.
 
-[`Object` 클래스의 내장 메서드](https://github.com/dbgusrb12/Java-Study/tree/master/6.Inheritance#object-%ED%81%B4%EB%9E%98%EC%8A%A4%EC%9D%98-%EB%82%B4%EC%9E%A5-%EB%A9%94%EC%84%9C%EB%93%9C) 에 있는 메서드 중 쓰레드의 상태를 변화 시키는 메서드는   
+[`Object` 클래스의 내장 메서드](https://github.com/dbgusrb12/Java-Study/tree/master/06.Inheritance#object-%ED%81%B4%EB%9E%98%EC%8A%A4%EC%9D%98-%EB%82%B4%EC%9E%A5-%EB%A9%94%EC%84%9C%EB%93%9C) 에 있는 메서드 중 쓰레드의 상태를 변화 시키는 메서드는   
 `wait`, `notify`, `notifyAll` 이다.
 
 ```java

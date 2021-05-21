@@ -339,7 +339,7 @@ java 옵션인 `-classpath` 가 적용된다.
 
 # 접근지시자
 
-클래스 주차에서 설명했던 내용 ([접근제어자](https://github.com/dbgusrb12/Java-Study/tree/master/5.Class#%EC%A0%91%EA%B7%BC-%EC%A0%9C%EC%96%B4%EC%9E%90)) 을 기반으로 추가하려고 한다.  
+클래스 주차에서 설명했던 내용 ([접근제어자](https://github.com/dbgusrb12/Java-Study/tree/master/05.Class#%EC%A0%91%EA%B7%BC-%EC%A0%9C%EC%96%B4%EC%9E%90)) 을 기반으로 추가하려고 한다.  
 
 ### 접근 권한
 

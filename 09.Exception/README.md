@@ -77,7 +77,7 @@ Java 에서 제공하는 예외 처리에 대한 방법은 다양하다.
 ## `try-catch-finally`
 
 예외가 발생 할 코드를 미리 체크하여, 에러가 발생 했을 때 실행 할 코드를 지정 할 수 있다.
-[변수의 스코프](https://github.com/dbgusrb12/Java-Study/tree/study/2.DataType%2CVariable%2CArray#%EB%B3%80%EC%88%98%EC%9D%98-%EC%8A%A4%EC%BD%94%ED%94%84%EC%99%80-%EB%9D%BC%EC%9D%B4%ED%94%84%ED%83%80%EC%9E%84) 에 따라서 블럭(`{}`) 안에 선언된 변수들은 그 안에서만 유효하다.
+[변수의 스코프](https://github.com/dbgusrb12/Java-Study/tree/study/02.DataType%2CVariable%2CArray#%EB%B3%80%EC%88%98%EC%9D%98-%EC%8A%A4%EC%BD%94%ED%94%84%EC%99%80-%EB%9D%BC%EC%9D%B4%ED%94%84%ED%83%80%EC%9E%84) 에 따라서 블럭(`{}`) 안에 선언된 변수들은 그 안에서만 유효하다.
 
 ```java
 try {

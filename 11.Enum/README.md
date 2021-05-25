@@ -3,7 +3,13 @@ Enum
 
 # 열거형 (Enum) 이란?
 
-`Enum` 은 Enumeration 으로 열거형 이라고 불린다.
+`Enum` 은 Enumeration 의 약자로, 열거형이라고도 한다.
+
+서로 연관성이 있는 상수들의 집합이고,   
+JDK 1.5 부터 추가되었다고 한다.
+
+
+ 
 
 
 

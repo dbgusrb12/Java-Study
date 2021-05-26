@@ -316,6 +316,9 @@ public final enum com/company/hg/enumTest/Day extends java/lang/Enum {
 그렇게 해서 enum 타입의 `valueOf` 메서드는 매개변수로 `String name` 만 받아도   
 해당 타입의 이름을 가진 상수를 가져 올 수 있는 것이다.
 
+# `EnumSet`
+
+`EnumSet` 은 enum 으로 작동 하기 위한 `Set` 컬렉션이다.
 
 > 웹문서
 > - [The Java Tutorials(Enum Types)](https://docs.oracle.com/javase/tutorial/java/javaOO/enum.html)

@@ -320,6 +320,202 @@ public final enum com/company/hg/enumTest/Day extends java/lang/Enum {
 
 `EnumSet` 은 enum 으로 작동 하기 위한 `Set` 컬렉션이다.
 
+`Set` 인터페이스를 기반으로 하며, enum 요소들을 담아내어 보다 빠르게 결과를 도출해 낼 수 있다.
+
+## `EnumSet` 특징
+
+- `enum` 타입만 들어 갈 수 있고, 들어가는 enum 의 타입은 모두 같은 타입이여야 한다.
+- null 을 추가 할 수 없다.
+- 쓰레드에 안전 하지 않아 필요하다면 외부에서 동기화를 해야한다.
+- 저장되는 값은 해당 enum type 의 ordinal 을 따라간다.
+- 모든 메서드는 산술 비트 연산을 사용하여 구현되었기 때문에 연산이 매우 빠르다.
+
+## `EnumSet` 내부 메서드
+
+`EnumSet` 클래스에서 제공하는 메서드들 중 `EnumSet` 인스턴스를 만들 수 있는   
+메서드가 여러가지가 있다.
+
+### `of(E e, E e2, ...)`
+
+`of()` 메서드는 매개변수에 정의된 enum 의 필드값을 넣으면 되는데,   
+`EnumSet` 클래스에서 정의 되어 있는 메서드는 5개의 매개변수까지 존재하고 그 이후의 것은   
+`of(E first, E... rest)` 이런 식으로 정의 되어 있는 것을 볼 수 있다.
+
+```java
+public class EnumSetTest {
+    enum Day {
+        MONDAY,
+        TUESDAY,
+        WEDNESDAY,
+        THURSDAY,
+        FRIDAY
+    }
+
+    public static void main(String[] args) {
+        EnumSet<Day> enumSet1 = EnumSet.of(Day.MONDAY);
+        EnumSet<Day> enumSet2 = EnumSet.of(Day.MONDAY, Day.TUESDAY);
+        EnumSet<Day> enumSet3 = EnumSet.of(Day.MONDAY, Day.TUESDAY, Day.WEDNESDAY);
+        EnumSet<Day> enumSet4 = EnumSet.of(Day.MONDAY, Day.TUESDAY, Day.WEDNESDAY, Day.THURSDAY);
+        
+        // 순서를 바꿔도 저장 된 것을 보면 ordinal 순으로 저장 된 게 보인다.
+        EnumSet<Day> enumSet5 = EnumSet.of(Day.WEDNESDAY, Day.TUESDAY, Day.MONDAY, Day.THURSDAY, Day.FRIDAY);
+
+        System.out.println(enumSet1);
+        System.out.println(enumSet2);
+        System.out.println(enumSet3);
+        System.out.println(enumSet4);
+        System.out.println(enumSet5);
+    }
+}
+```
+```
+[MONDAY]
+[MONDAY, TUESDAY]
+[MONDAY, TUESDAY, WEDNESDAY]
+[MONDAY, TUESDAY, WEDNESDAY, THURSDAY]
+[MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY]
+```
+
+### `allOf(Class<E> elementType)`
+
+`allOf` 메서드는 해당 타입의 enum 내부에 존재하는 요소들을 전부 가져와 `EnumSet` 인스턴스를 만든다.
+
+```java
+public class EnumSetTest {
+    enum Day {
+        MONDAY,
+        TUESDAY,
+        WEDNESDAY,
+        THURSDAY,
+        FRIDAY
+    }
+
+    public static void main(String[] args) {
+        EnumSet<Day> enumSet = EnumSet.allOf(Day.class);
+        
+        System.out.println(enumSet);
+    }
+}
+```
+```
+[MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY]
+```
+
+### `copyOf(EnumSet<E> s)`, `copyOf(Collection<E> c)`
+
+`copyOf` 메서드는 해당 `EnumSet` 인스턴스나, 타입이 `Enum` 인 컬렉션을 기반으로   
+복사본을 만들어 준다.
+
+```java
+import java.util.EnumSet;
+
+public class EnumSetTest {
+    enum Day {
+        MONDAY,
+        TUESDAY,
+        WEDNESDAY,
+        THURSDAY,
+        FRIDAY
+    }
+
+    public static void main(String[] args) {
+        EnumSet<Day> enumSet = EnumSet.allOf(Day.class);
+
+        EnumSet<Day> copyEnumSet = EnumSet.copyOf(enumSet);
+
+        // 원본을 바꿔도 복사본이 바뀌지 않는다.
+        enumSet = EnumSet.noneOf(Day.class);
+
+        System.out.println(copyEnumSet);
+    }
+}
+```
+```
+
+```
+
+### `range(E from, E to)`
+
+`range` 메서드는 해당 enum 요소의 범위를 정해 가져와서 반환한다.
+
+반드시 첫번째 매개변수의 ordinal 이 두번째 매개변수의 ordinal 보다 작거나 같아야 한다.
+
+```java
+public class EnumSetTest {
+    enum Day {
+        MONDAY,
+        TUESDAY,
+        WEDNESDAY,
+        THURSDAY,
+        FRIDAY
+    }
+
+    public static void main(String[] args) {
+        EnumSet<Day> enumSet = EnumSet.range(Day.MONDAY, Day.WEDNESDAY);
+        
+        // range 의 매개변수는 무조건 앞의 ordinal 이 뒤의 ordinal 보다 작거나 같아야 한다.
+        // EnumSet<Day> enumSet = EnumSet.range(Day.WEDNESDAY, Day.MONDAY);
+        
+        System.out.println(enumSet);
+    }
+}
+```
+```
+[MONDAY, TUESDAY, WEDNESDAY]
+```
+
+### `complementOf(EnumSet<E> s)`
+
+`complementOf` 메서드는 해당 enum 타입의 요소를 제외한 요소만 넣어서 반환한다.
+
+```java
+import java.util.EnumSet;
+
+public class EnumSetTest {
+    enum Day {
+        MONDAY,
+        TUESDAY,
+        WEDNESDAY,
+        THURSDAY,
+        FRIDAY
+    }
+
+    public static void main(String[] args) {
+        EnumSet<Day> enumSet = EnumSet.complementOf(EnumSet.range(Day.MONDAY, Day.WEDNESDAY));
+        
+        System.out.println(enumSet);
+    }
+}
+```
+```
+[THURSDAY, FRIDAY]
+```
+
+### `noneOf(Class<E> elementType)`
+
+`noneOf` 메서드는 해당 타입의 빈 `EnumSet` 을 반환한다.
+
+```java
+public class EnumSetTest {
+    enum Day {
+        MONDAY,
+        TUESDAY,
+        WEDNESDAY,
+        THURSDAY,
+        FRIDAY
+    }
+
+    public static void main(String[] args) {
+        EnumSet<Day> enumSet = EnumSet.noneOf(Day.class);
+        
+        System.out.println(enumSet);
+    }
+}
+```
+```
+[]
+```
+
 > 웹문서
 > - [The Java Tutorials(Enum Types)](https://docs.oracle.com/javase/tutorial/java/javaOO/enum.html)
 > - [Java: enum 의 뿌리를 찾아서...](https://www.nextree.co.kr/p11686/)

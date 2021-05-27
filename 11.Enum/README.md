@@ -174,6 +174,9 @@ public class EnumTest {
 
 `ordinal` 메서드는 해당 enum 타입의 상수가 나열 되어있는 인덱스를 알 수 있다.
 
+ordinal 을 이용해 로직을 짤 경우 enum 내부의 순서는 언제든지 바뀔 수 있기 때문에,   
+실제 실무에서 사용하기에는 위험한 메서드이다.
+
 ```java
 public class EnumTest {
     enum Day {

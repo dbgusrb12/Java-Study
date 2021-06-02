@@ -230,6 +230,12 @@ public @interface MyAnnotation {
 public class MyClass { ... }
 ```
 
+# Annotation Processor
+
+어노테이션 프로세서란 컴파일 타임에 개발자가 정의한 어노테이션의 소스 코드를 분석하고   
+처리 하기 위해 사용되는 훅이다.
+
+
 > 웹문서
 > - [The Java Tutorials(Annotation)](https://docs.oracle.com/javase/tutorial/java/annotations/index.html)
 > - [Java 에서 어노테이션(Annotation)이란?](https://elfinlas.github.io/2017/12/14/java-annotation/)

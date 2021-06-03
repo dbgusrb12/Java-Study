@@ -230,10 +230,113 @@ public @interface MyAnnotation {
 public class MyClass { ... }
 ```
 
+## Java 리플렉션을 이용해 어노테이션 다루기
+
+```java
+@Retention(RetentionPolicy.RUNTIME)
+public @interface MyAnnotation {
+    int num() default 10;
+    String name() default "hyunGyu";
+}
+
+@MyAnnotation(num = 5, name = "annotation")
+public class AnnotationClass {
+    @MyAnnotation(num = 5, name = "annotation")
+    public void sampleMethod() {
+    }
+}
+public class AnnotationTest {
+    public static void main(String[] args) {
+        // 클래스 정보 추출
+        Class<AnnotationClass> annotationClass = AnnotationClass.class;
+
+        // 클래스의 모든 어노테이션 정보 추출
+        Annotation[] annotations = annotationClass.getAnnotations();
+
+        for (Annotation annotation : annotations) {
+            System.out.println(annotation);
+        }
+
+        // 클래스에 해당 어노테이션이 있는지 확인
+        if (annotationClass.isAnnotationPresent(MyAnnotation.class)) {
+            // 클래스의 해당 어노테이션 정보 추출
+            MyAnnotation annotation = annotationClass.getAnnotation(MyAnnotation.class);
+            System.out.println(annotation);
+        }
+
+        // 클래스의 메서드 정보 추출
+        Method[] methods = annotationClass.getDeclaredMethods();
+
+        for (Method method : methods) {
+            // 메서드에 해당 어노테이션이 있는지 확인
+            if (method.isAnnotationPresent(MyAnnotation.class)) {
+                // 메서드에 해당 어노테이션 정보 추출
+                MyAnnotation annotation = method.getAnnotation(MyAnnotation.class);
+                System.out.println(annotation);
+            }
+        }
+    }
+}
+```
+```
+@com.company.hg.annotation.MyAnnotation(name="annotation", num=5)
+@com.company.hg.annotation.MyAnnotation(name="annotation", num=5)
+@com.company.hg.annotation.MyAnnotation(name="annotation", num=5)
+```
+
 # Annotation Processor
 
 어노테이션 프로세서란 컴파일 타임에 개발자가 정의한 어노테이션의 소스 코드를 분석하고   
 처리 하기 위해 사용되는 훅이다.
+
+어노테이션 소스 코드를 분석하고, 바이트코드를 추가 할 수도 있고, 에러를 발생시킬 수도 있다.
+
+컴파일 타임에 처리가 되기 때문에,   
+런타임에 처리하는 로직이 없어 빠르고,   
+많은 예외를 발생시키는 리플렉션을 사용하지 않기 때문에 비용이 적게 든다.
+
+`AbstractProcessor` 를 상속 받아 구현하며,   
+여러 메서드를 오버라이딩 하여 사용한다.
+
+### `process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv)`   
+
+이 메서드를 사용하여 소스코드를 분석하고, 바이트코드를 추가하고, 에러를 발생시키는등의 기능을 구현한다.
+
+### `getSupportedAnnotationTypes()`   
+
+해당 어노테이션 프로세서가 어떤 어노테이션을 처리하기 위해 만들어졌는데 정의하는 메서드이다.
+
+### `getSupportedSourceVersion()`   
+
+어떤 자바 버전을 사용할지 정의하는 메서드이다.
+
+###`init(ProcessingEnvironment processingEnv)`   
+
+모든 애노테이션 프로세서는 기본 생성자를 반드시 가지고 있다.  
+그리고 설정값들인 그 외의 설정값들은 `init` 메서드를 통해 설정을 한다.   
+
+이 메서드에 매개변수인 `ProcessingEnvironment` 객체가 제공하는   
+`Elements`, `Types`, `Filer` 들을 사용하여 여러가지 유용한 설정들을 등록 할 수 있다.
+
+
+```java
+public class MyProcessor extends AbstractProcessor {
+    @Override
+    public synchronized void init(ProcessingEnvironment env){ }
+ 
+    @Override
+    public boolean process(Set<? extends TypeElement> annoations, RoundEnvironment env) { }
+ 
+    @Override
+    public Set<String> getSupportedAnnotationTypes() { }
+ 
+    @Override
+    public SourceVersion getSupportedSourceVersion() { }
+ 
+}
+
+```
+
 
 
 > 웹문서

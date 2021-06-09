@@ -109,9 +109,6 @@ Java 4 부터 버퍼 기반의 채널 방식으로 데이터를 입/출력 하�
 같이 쓰인다.
 
 
-
-위에서 
-
 > 웹문서
 > - [The Java Tutorials(I/O)](https://docs.oracle.com/javase/tutorial/essential/io/)
 > - [[개념정리] 버퍼(BUFFER)란? 버퍼 개념](https://dololak.tistory.com/84)

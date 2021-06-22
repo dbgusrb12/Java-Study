@@ -234,7 +234,5 @@ public class GenericsTest {
 # 와일드카드 (Wildcard)
 
 
-
-
 > 웹문서
 > - [The Java Tutorials(Generics)](https://docs.oracle.com/javase/tutorial/java/generics/index.html)

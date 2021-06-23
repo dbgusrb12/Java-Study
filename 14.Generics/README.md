@@ -233,6 +233,49 @@ public class GenericsTest {
 
 # 와일드카드 (Wildcard)
 
+제네릭에서 와일드카드는 `?` 를 사용하여 표현한다.   
+와일드카드는 말 그대로 알 수 없는 타입을 나타내며 매개변수, 필드값이나 지역변수, 그리고 리턴 타입에서 사용된다.   
+(리턴 타입은 구체적으로 작성하는게 더 나은 프로그래밍 관행이지만, 와일드카드를 사용하여 표현 할 수 있다고 한다.)
+
+와일드카드는 제네릭 메서드 호출, 제네릭 클래스의 인스턴스 생성, 부모 타입에 대한 타입 인자로는 사용 할 수 없다.
+
+## 상한 와일드카드 (Upper Bounded Wildcards)
+
+상한 와일드카드를 사용하면 변수에 대한 제한을 완화 할 수 있다.
+
+바운디드 타입과 비슷하게 `extends` 키워드를 사용하여 표현한다.
+
+```java
+public class WildcardTest {
+    public static void main(String[] args) {
+        List<Integer> list = Arrays.asList(1, 2, 3);
+        double listSum = sumOfList(list);
+        System.out.println("sum = " + listSum);
+
+        List<Double> doubleList = Arrays.asList(1.2, 2.3, 3.5);
+        double doubleListSum = sumOfList(doubleList);
+        System.out.println("sum = " + doubleListSum);
+    }
+
+    public static double sumOfList(List<? extends Number> list) {
+        double sum = 0.0;
+        for (Number number : list) {
+            sum += number.doubleValue();
+        }
+        return sum;
+    }
+}
+```
+```
+sum = 6.0
+sum = 7.0
+```
+
+## 언바운드 와일드카드 (Unbounded Wildcards)
+
+아무 제한도 되지 않은 와일드 카드를 의미하며,   
+이 방식이 유용한 두 가지 대표적인 시나리오가 있다.
+
 
 > 웹문서
 > - [The Java Tutorials(Generics)](https://docs.oracle.com/javase/tutorial/java/generics/index.html)

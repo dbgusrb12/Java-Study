@@ -274,8 +274,201 @@ sum = 7.0
 ## 언바운드 와일드카드 (Unbounded Wildcards)
 
 아무 제한도 되지 않은 와일드 카드를 의미하며,   
-이 방식이 유용한 두 가지 대표적인 시나리오가 있다.
+언바운드 와일드카드를 사용하면 유용한 상황은 크게 두 가지로 나뉜다.
 
+### `Object` 클래스의 내장 메서드를 사용하여 메서드를 작성하는 경우
+
+`Object` 클래스가 제공하는 메서드를 사용하는 경우에는, 모든 클래스에서 사용 할 수 있는 메서드이기 떄문에,   
+제한되지 않은 와일드카드를 사용하여 작성 할 수 있다.
+
+
+### 제네릭 클래스의 타입에 의존적이지 않은 메서드를 사용하는 경우
+
+제네릭 클래스에 해당하는 타입에 맞게 사용하는 메서드들이 아닌,   
+제네릭 클래스에서 모든 타입에 사용 할 수 있는 메서드를 사용하는 경우   
+제한되지 않은 와일드카드를 사용하여 작성 할 수 있다.
+
+
+```java
+public class WildcardTest {
+    public static void main(String[] args) {
+        List<Integer> integerList = Arrays.asList (1, 2, 3);
+        List<String> stringList = Arrays.asList ("one", "two", "three");
+
+        // Unbounded Wildcards 를 사용하여 어떤 타입의 List 를 사용해도 다 가능하다.
+        printList(integerList);
+        printList(stringList);
+
+        System.out.println(getSize(integerList));
+        System.out.println(getSize(stringList));
+    }
+    /**
+     * Object 클래스의 toString() 를 사용한 메서드
+     * @param list
+     */
+    public static void printList(List<?> list) {
+        for (Object obj : list) {
+            System.out.println(obj);
+        }
+    }
+
+    /**
+     * List 클래스의 size() 를 사용한 메서드
+     * @param list
+     * @return
+     */
+    public static int getSize(List<?> list) {
+        return list.size();
+    }
+}
+```
+```
+1
+2
+3
+one
+two
+three
+3
+3
+```
+
+## 하한 와일드카드 (Lower Bounded Wildcards)
+
+상한 와일드카드 (Upper Bounded Wildcards) 와는 반대로,   
+해당 클래스의 상위 클래스들만 올 수 있도록 제한하는 와일드카드이다.
+
+하한 와일드카드는 `super` 키워드를 사용하여 표현한다.
+
+해당 타입을 받을 수 있는 최상위 클래스까지 허용하여, 유연성을 최대화하기 위해 사용한다.
+
+```java
+public class WildcardTest {
+    public static void main(String[] args) {
+        List<Integer> integerList = new ArrayList<>();
+        List<Number> numberList = new ArrayList<>();
+        List<Object> objectList = new ArrayList<>();
+        
+        // Integer 타입의 상위 클래스인 Number, Object 타입의 제네릭이 들어가도 실행 된다.
+        addNumbers(integerList);
+        addNumbers(numberList);
+        addNumbers(objectList);
+
+        printList(integerList);
+        printList(numberList);
+        printList(objectList);
+    }
+    
+    
+    /**
+     * Integer 형 타입을 넣을 수 있는 최대 
+     * @param list
+     */
+    public static void addNumbers(List<? super Integer> list) {
+        for (int i = 1; i <= 5; i++) {
+            list.add(i);
+        }
+    }
+
+    public static void printList(List<?> list) {
+        for (Object obj : list) {
+            System.out.print(obj);
+        }
+        System.out.println();
+    }
+}
+```
+```
+12345
+12345
+12345
+```
+
+# Type Erasure
+
+Java 에서 제네릭이 도입 되고, 컴파일 타임에 엄격한 타입 체크가 이루어졌고,   
+이런 제네릭을 구현하기 위해서 Java 컴파일러는 타입 소거 (Type Erasure) 기능을 제공한다.
+
+타입 소거의 기본적인 규칙은 제네릭 타입 파라미터의 값의 바인딩이 존재하면 첫번쨰 바인딩 클래스 타입으로   
+치환되고, 바인딩이 존재하지 않으면, `Object` 타입의 파라미터로 대체된다.
+
+예를 들면,
+
+```java
+public class GenericClass<T extends Number> {
+    T t;
+
+    public GenericClass() {
+    }
+
+    public void setT(T t) {
+        this.t = t;
+    }
+
+    public T getT() {
+        return this.t;
+    }
+}
+```
+
+이런 바인딩이 있는 Generic 클래스가 컴파일 되는 시점에는 
+
+```java
+public class GenericClass {
+    Number t;
+
+    public GenericClass() {
+    }
+
+    public void setT(Number t) {
+        this.t = t;
+    }
+
+    public Number getT() {
+        return this.t;
+    }
+}
+```
+
+해당 제네릭 타입의 첫번쨰 바인딩 클래스의 타입으로 치환된다.
+
+```java
+public class GenericClass<T> {
+    T t;
+
+    public GenericClass() {
+    }
+
+    public void setT(T t) {
+        this.t = t;
+    }
+
+    public T getT() {
+        return this.t;
+    }
+}
+```
+
+그리고 이렇게 바인딩이 없는 일반 제네릭 클래스는
+
+```java
+public class GenericClass {
+    Object t;
+
+    public GenericClass() {
+    }
+
+    public void setT(Object t) {
+        this.t = t;
+    }
+
+    public Object getT() {
+        return this.t;
+    }
+}
+```
+
+`Object` 타입으로 치환된다.
 
 > 웹문서
 > - [The Java Tutorials(Generics)](https://docs.oracle.com/javase/tutorial/java/generics/index.html)

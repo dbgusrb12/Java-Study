@@ -46,7 +46,6 @@ a -> System.out.println(a);
 `()` 를 꼭 써야한다.
 
 
-
 > 웹문서
 > - [The Java Tutorials(Lambda Expressions)](https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html)
 > - [java 8 람다식이란?](https://effectivesquid.tistory.com/entry/java-8-%EB%9E%8C%EB%8B%A4%EC%8B%9D%EC%9D%B4%EB%9E%80)

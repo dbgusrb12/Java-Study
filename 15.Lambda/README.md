@@ -45,7 +45,77 @@ a -> System.out.println(a);
 매개 변수가 한 개일 때에는 `()` 를 제거 할 수 있지만, 매개 변수가 없거나, 두 개 이상인 경우   
 `()` 를 꼭 써야한다.
 
+# 함수형 인터페이스
+
+람다식은 실제로는 익명 클래스의 객체와 동일하다.
+
+```java
+public interface TestInterface {
+    void print(String str, String str2);
+}
+
+public class LambdaTest {
+    public static void main(String[] args) {
+        // 익명 클래스로 구현한 TestInterface
+        TestInterface testInterface = new TestInterface() {
+            @Override
+            public void print(String str, String str2) {
+                System.out.println(str + str2);
+            }
+        };
+
+        // 람다식으로 구현한 TestInterface
+        TestInterface testLambdaInterface = (str, str2) -> System.out.println(str + str2);
+
+        testInterface.print("안녕", "하세요.");
+        testLambdaInterface.print("안녕", "하세요.");
+        
+    }
+}
+```
+```
+안녕하세요.
+안녕하세요.
+```
+
+람다식으로 표현된 객체는 익명 클래스의 객체와 동일한 기능을 하는 것을 볼 수 있다.   
+하지만 인터페이스의 선언된 메서드가 두 개 이상일 경우 인터페이스의 모든 메서드를 재정의 해야 하고,   
+람다식으로 여러 개의 메서드를 표현 할 수 없기 때문에,   
+Java 에서는 하나의 메서드만 선언된 인터페이스로 람다식을 다룬다.
+
+이렇게 하는 것이 객체 지향 언어인 Java 의 기존 규칙을 깨뜨리지 않고,   
+자연스럽게 함수형 프로그래밍을 지원 할 수 있다.
+
+람다식을 다루기 위해 선언한 인터페이스를 **함수형 인터페이스 (Functional Interface)** 라고 한다.
+
+함수형 인터페이스는 `@FunctionalInterface` 어노테이션으로 명시 할 수 있으며,   
+`@FunctionInterface` 어노테이션으로 함수형 인터페이스에 대한 형식을 미리 검사 할 수 있다.
+
+함수형 인터페이스의 추상 메서드는 오직 하나만 선언 되어 있어야 하지만,   
+`static` 메서드와 `default` 메서드는 개수의 제약이 없다.
+
+# Variable Capture
+
+람다식 내부에서 외부의 지역 변수를 사용하려고 할 때 두가지 제약 조건이 존재한다.   
+이 두가지 조건을 만족하는 지역 변수만 람다식 내부에서 사용 할 수 있다.
+
+- 사용하고자 하는 외부의 지역 변수는 `final` 로 선언되어 있어야 한다.
+- `final` 로 선언되어 있지 않은 변수는 `final` 처럼 동작해야 한다. (`Effectively final`)
+
+## `Effectively final`
+
+Java 7 에서 익명 클래스의 인스턴스로 넘겨지는 모든 변수들은 `final` 이여야만 한다.   
+`final` 이 아닌 변수를 넘기면 컴파일 에러가 발생한다.
+
+익명 클래스에 컨텍스트를 넘겨주는 것을 클로저라고 하고,   
+컴파일러는 이 필요한 정보를 복사해서 넘겨주는데 이걸 `Variable capture` 라고 한다.
+
+Java 8 에서 `Effectively final` 이라는 개념이 도입되면서,   
+컴파일러에서 해당 변수가 변경 되지 않았다고 판단되면 `final` 이 아니여도, 그 변수를   
+`final` 로 해석 할 수 있다.
+
 
 > 웹문서
 > - [The Java Tutorials(Lambda Expressions)](https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html)
 > - [java 8 람다식이란?](https://effectivesquid.tistory.com/entry/java-8-%EB%9E%8C%EB%8B%A4%EC%8B%9D%EC%9D%B4%EB%9E%80)
+> - [(Java) 람다 캡처링과 final 제약조건](https://perfectacle.github.io/2019/06/30/java-8-lambda-capturing/)

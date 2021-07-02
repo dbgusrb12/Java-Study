@@ -114,6 +114,95 @@ Java 8 에서 `Effectively final` 이라는 개념이 도입되면서,
 컴파일러에서 해당 변수가 변경 되지 않았다고 판단되면 `final` 이 아니여도, 그 변수를   
 `final` 로 해석 할 수 있다.
 
+# 메서드 레퍼런스, 생성자 레퍼런스
+
+메서드 레퍼런스, 생성자 레퍼런스는 람다식에서 쓰이는 축약 표현으로,   
+해당 람다식의 내용이 그저 다른 메서드로 전달 하는 목적만 있다면,   
+해당 메서드, 생성자 참조를 통해 데이터를 전달 할 수 있다.
+
+이런 형식은 자주 사용되는 패턴의 람다식을 줄여서 간단하게 사용 할 수 있는 방법이다.
+
+## 메서드 레퍼런스
+
+메서드 레퍼런스는 `static` 메서드 레퍼런스와, 인스턴스 메서드 레퍼런스가 있다.
+
+`static` 메서드 레퍼런스는
+
+`클래스이름::정적메서드이름`
+
+으로 표현 되고, 람다식의 파라미터들이 정적 메서드의 파라미터 값으로 들어간다.
+
+```java
+(String s) -> System.out.println(s)
+// 을
+System.out::println
+// 와 같이 표현 할 수 있다.
+```
+
+인스턴스 메서드 레퍼런스는 `static` 메서드 레퍼런스와 비슷하게
+
+`클래스이름::인스턴스메서드이름`
+
+으로 표현되고,   
+람다식의 첫번쨰 파라미터가 메서드의 수신자,   
+나머지 파라미터가 해당 인스턴스 메서드의 파라미터 값으로 들어간다.
+
+```java
+public interface Sample {
+    boolean equals(String a, String b);
+}
+
+public class MethodReferenceTest {
+    public static void main(String[] args) {
+        // 두 메서드는 같은 기능을 한다.
+        Sample sample = (String a, String b) -> a.equals(b);
+        // 해당 람다식의 첫번쨰 파라미터가 수신자가 되고, 나머지 파라미터들이 메서드의 파라미터가 된다.
+        Sample sample2 = String::equals;
+
+        System.out.println(sample.equals("안녕", "안녕"));
+        System.out.println(sample2.equals("안녕", "하세요"));
+    }
+}
+```
+```
+true
+false
+```
+
+## 생성자 레퍼런스
+
+생성자 레퍼런스는 
+
+`클래스이름::new`
+
+로 표현되고, 람다식의 파라미터들은 해당 생성자의 파라미터로 들어간다.
+
+이 때, 파라미터의 개수와 같은 생성자가 없다면, 컴파일 에러가 난다.
+
+```java
+public class TestClass {
+    
+    private String name;
+    
+    public TestClass(String name) {
+        this.name = name;
+    }
+}
+
+public interface ConstructorTest {
+    
+    TestClass getTestClass(String name);
+
+}
+
+public class SampleClass {
+    public static void main(String[] args) {
+        // 생성자 레퍼런스를 이용하여 객체를 받아 올 수 있다. (이 때 해당 파라미터 개수 만큼의 생성자가 없으면 에러 발생)
+        ConstructorTest constructorTest = TestClass::new;
+        TestClass testClass = constructorTest.getTestClass();
+    }
+}
+```
 
 > 웹문서
 > - [The Java Tutorials(Lambda Expressions)](https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html)

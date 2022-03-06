@@ -50,7 +50,7 @@ Checked Exception 을 처리하지 않으면 컴파일 자체가 안되는 점�
 
 또한, 컴파일 시점에서 체크를 하기 때문에, 웬만한 IDE 에서는 Syntax Error 처럼 표시해준다.
 
-기본적으로 Checked Exception 은 예외 발생 시 트랜잭션을 roll-back 하지 않고   
+Spring 의 Transaction은 기본적으로 Checked Exception 은 예외 발생 시 트랜잭션을 roll-back 하지 않고   
 예외를 발생시킨다.
 
 ### Unchecked Exception
@@ -63,7 +63,7 @@ Unchecked Exception 은 명시적인 처리를 강제하지 않는 예외로,
 명시적으로 예외 처리를 하지 않아도 프로그램이 실행되며,   
 예외가 발생되는 시점에 애플리케이션의 구동을 멈춘다.
 
-기본적으로 Unchecked Exception 은 예외 발생 시 트랜잭션을 roll-back 한 후,   
+Spring 의 Transaction은 기본적으로 Unchecked Exception 은 예외 발생 시 트랜잭션을 roll-back 한 후,   
 예외를 발생시킨다.
 
 
